@@ -89,7 +89,9 @@ void Xapp::startup(SubscriptionHandler &sub_ref) {
 
 	subhandler_ref = &sub_ref;
 
-    if (GNB_ID == "") {
+    std::cout << "GNB_ID " << GNB_ID << std::endl;
+
+    if (strcmp(GNB_ID, "") == 0) {
         // get list of gnbs from ric
         std::cout << "Getting gNB list from RIC" << std::endl;
         set_rnib_gnblist();
@@ -124,15 +126,18 @@ void Xapp::startup(SubscriptionHandler &sub_ref) {
 
     for (int i = 0; i < drl_agent_ip.size(); ++i) {
         // open control socket with agent
+        std::cout << "Opening control socket with host " << drl_agent_ip[i].c_str() << ":" << 4200 << std::endl;
         if (open_control_socket_agent(const_cast<char*>(drl_agent_ip[i].c_str()), 4200) == 0) {
             // start receive thread
             std::unique_ptr<std::thread> tmp_thr = std::unique_ptr<std::thread>(new std::thread{&Xapp::handle_rx_msg_agent, this, drl_agent_ip[i]});
             control_thr_rx.push_back(std::move(tmp_thr));
+        }else{
+
         }
     }
 
     // send test message
-    // send_socket("Hello, Server!", AGENT_1);
+    // send_socket("Hello, Server!", AGENT_0);
 
 	//send subscriptions.
 	startup_subscribe_requests();
@@ -209,6 +214,7 @@ void Xapp::handle_rx_msg(void) {
                     send_ric_control_request(buf, it_gnb->second);
                 }
                 else {
+                    // send_ric_control_request(buf, std::to_string(1));
                     std::cout << "ERROR: No gNB ID found for agent " << agent_ip << std::endl;
                 }
 

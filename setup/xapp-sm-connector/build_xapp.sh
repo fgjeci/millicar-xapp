@@ -30,3 +30,11 @@ if [ ${BUILD_CLEAN} ]; then
 else
     cd ${CONNECTOR_DIR}/src && make -j ${nproc} && make install && ldconfig
 fi
+
+# modified
+# build tiny-xml
+# if [ ${BUILD_CLEAN} ]; then
+#     cd ${CONNECTOR_DIR}/tinyxml2 && make clean && make -j ${nproc} && make install && ldconfig
+# else
+#     cd ${CONNECTOR_DIR}/tinyxml2 && make -j ${nproc} && make install && ldconfig
+# fi

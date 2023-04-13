@@ -1,0 +1,112 @@
+2023-03-17 10:57:08,693 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 10:58:04,455 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 10:58:37,803 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 10:58:52,186 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 10:59:50,766 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 11:01:03,582 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 11:01:13,938 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 11:04:06,763 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 11:04:26,114 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 11:04:56,279 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 16:52:46,466 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 16:53:40,811 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 16:55:35,450 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 17:03:36,973 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-17 19:06:22,352 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:34:30,553 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:36:21,284 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:38:18,333 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:42:05,977 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:44:10,817 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:44:44,079 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:45:54,531 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:51:15,581 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 11:51:45,969 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 12:05:15,092 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 12:05:35,727 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 12:08:28,498 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 12:24:46,521 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 12:33:56,556 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 14:19:06,587 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:00:57,138 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:01:28,542 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:25:33,096 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:26:17,696 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:26:43,045 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:28:47,994 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:28:48,048 - ipso_formulation - INFO - Optimization finished | best cost: 40005.0, best pos: [7 4 1 5 8 0 6 2 3]
+2023-03-20 15:32:40,914 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:32:40,970 - ipso_formulation - INFO - Optimization finished | best cost: 19866.0, best pos: [6 4 7 1 5 0 2 3 8]
+2023-03-20 15:37:20,008 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:37:20,058 - ipso_formulation - INFO - Optimization finished | best cost: 42480.0, best pos: [3 0 1 6 7 8 4 5 2]
+2023-03-20 15:39:47,154 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:41:44,270 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 15:43:31,107 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:00:24,185 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:01:04,982 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:02:11,905 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:02:19,383 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:03:44,714 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:04:23,327 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:07:36,065 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:09:53,113 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:11:57,096 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:12:18,316 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:18:21,839 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:18:35,582 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:22:00,942 - ipso_formulation - INFO - Optimization finished | best cost: 44205.0, best pos: [0 1 2 1 2 1 3 2 0]
+2023-03-20 16:22:08,656 - ipso_formulation - INFO - Optimize for 1 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:22:08,705 - ipso_formulation - INFO - Optimization finished | best cost: 35469.0, best pos: [2 1 3 0 0 0 0 0 1]
+2023-03-20 16:25:59,377 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:26:02,396 - ipso_formulation - INFO - Optimization finished | best cost: 57942.0, best pos: [0 0 1 1 3 3 1 3 1]
+2023-03-20 16:26:36,949 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:26:38,422 - ipso_formulation - INFO - Optimization finished | best cost: 49128.0, best pos: [2 2 2 1 2 0 0 0 0]
+2023-03-20 16:26:58,778 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:27:00,151 - ipso_formulation - INFO - Optimization finished | best cost: 42504.0, best pos: [1 2 3 0 1 0 3 2 3]
+2023-03-20 16:27:22,122 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:27:23,507 - ipso_formulation - INFO - Optimization finished | best cost: 49532.0, best pos: [1 1 0 0 2 0 3 1 2]
+2023-03-20 16:27:50,887 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:27:52,253 - ipso_formulation - INFO - Optimization finished | best cost: 48000.0, best pos: [0 2 0 2 0 0 2 0 0]
+2023-03-20 16:28:15,061 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:28:16,413 - ipso_formulation - INFO - Optimization finished | best cost: 55900.0, best pos: [0 2 2 2 3 1 1 3 2]
+2023-03-20 16:29:38,789 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:29:40,178 - ipso_formulation - INFO - Optimization finished | best cost: 39468.0, best pos: [2 2 0 3 3 3 0 1 0]
+2023-03-20 16:31:15,337 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:31:16,762 - ipso_formulation - INFO - Optimization finished | best cost: 32214.0, best pos: [0 3 2 0 3 1 1 1 3]
+2023-03-20 16:32:28,290 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:32:29,768 - ipso_formulation - INFO - Optimization finished | best cost: 42882.0, best pos: [2 1 3 1 0 2 3 2 0]
+2023-03-20 16:32:59,368 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:33:00,824 - ipso_formulation - INFO - Optimization finished | best cost: 29780.0, best pos: [2 0 3 2 1 3 0 3 0]
+2023-03-20 16:34:04,235 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:34:05,716 - ipso_formulation - INFO - Optimization finished | best cost: 25346.0, best pos: [2 3 1 0 0 1 2 2 2]
+2023-03-20 16:34:42,095 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:34:43,736 - ipso_formulation - INFO - Optimization finished | best cost: 44324.0, best pos: [3 0 3 2 2 2 3 1 0]
+2023-03-20 16:35:17,219 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:35:18,584 - ipso_formulation - INFO - Optimization finished | best cost: 48806.0, best pos: [2 0 2 0 3 1 1 1 0]
+2023-03-20 16:48:57,432 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 16:58:50,540 - ipso_formulation - INFO - Optimization finished | best cost: 53775.0, best pos: [0 3 3 2 3 0 2 2 3]
+2023-03-20 17:02:17,092 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 17:10:08,849 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 17:10:11,921 - ipso_formulation - INFO - Optimization finished | best cost: 47112.0, best pos: [2 2 0 0 1 1 1 1 2]
+2023-03-20 17:10:43,096 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:02:32,784 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:03:51,114 - ipso_formulation - INFO - Optimization finished | best cost: -75891.33333333333, best pos: [2 2 1 1 1 2 1 1 2]
+2023-03-20 18:05:43,584 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:05:45,912 - ipso_formulation - INFO - Optimization finished | best cost: -107380.0, best pos: [2 1 1 2 2 2 1 1 1]
+2023-03-20 18:05:46,928 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:05:49,352 - ipso_formulation - INFO - Optimization finished | best cost: -83266.66666666667, best pos: [2 1 1 2 1 1 2 1 2]
+2023-03-20 18:06:07,378 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:06:09,710 - ipso_formulation - INFO - Optimization finished | best cost: -105547.33333333333, best pos: [2 1 2 1 1 2 2 1 2]
+2023-03-20 18:06:48,294 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:06:50,481 - ipso_formulation - INFO - Optimization finished | best cost: -193150.0, best pos: [1 1 1 2 2 2 1 2 1]
+2023-03-20 18:08:13,476 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:12:10,892 - ipso_formulation - INFO - Optimization finished | best cost: 0.0, best pos: [0 2 0 2 0 2 0 2 1]
+2023-03-20 18:12:42,950 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:12:45,112 - ipso_formulation - INFO - Optimization finished | best cost: -15246.0, best pos: [1 2 2 1 1 0 2 1 1]
+2023-03-20 18:18:33,631 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:18:35,753 - ipso_formulation - INFO - Optimization finished | best cost: 0.0, best pos: [0 1 0 2 1 0 0 0 0]
+2023-03-20 18:18:51,163 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:18:53,256 - ipso_formulation - INFO - Optimization finished | best cost: -3102.0, best pos: [1 2 2 2 1 0 1 1 2]
+2023-03-20 18:19:44,696 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:21:04,758 - ipso_formulation - INFO - Optimize for 100 iters with {'c1': 0.5, 'c2': 0.3, 'w': 0.3, 'k': 1, 'p': 2}
+2023-03-20 18:47:27,702 - ipso_formulation - INFO - Optimization finished | best cost: -26560.0, best pos: [1 1 1 1 2 2 1 2 2]

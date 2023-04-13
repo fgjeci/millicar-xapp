@@ -10,6 +10,11 @@ ASNSRC:=../asn1c_defs
 E2APSRC:=./xapp-asn/e2ap
 E2SMSRC:=./xapp-asn/e2sm
 
+# modified
+TINYXMLSRC:=./xapp-tinyxml2
+RICCONTROLSRC:=./xapp-ric-control
+# end modification
+
 ####### Logging library and flags
 CLOGFLAGS:= `pkg-config mdclog --cflags`
 LOG_LIBS:= `pkg-config mdclog --libs`
@@ -19,16 +24,30 @@ RNIB_LIBS:= -pthread /usr/local/include/rnib/rnibreader.a
 
 
 BASEFLAGS=  -Wall -std=c++14 $(CLOGFLAGS) 
+# original
 C_BASEFLAGS= -Wall $(CLOGFLAGS) -DASN_DISABLE_OER_SUPPORT
+# end original
+# modified
+# C_BASEFLAGS= -Wall $(CLOGFLAGS)
+# end modification
 
 XAPPFLAGS= -I./
 HWFLAGS= -I./
 UTILFLAGS= -I$(UTILSRC)
 MSGFLAGS= -I$(MSGSRC)
 
+# original
 ASNFLAGS=-I$(ASNSRC) -DASN_DISABLE_OER_SUPPORT
+# end original
+# modified
+# ASNFLAGS=-I$(ASNSRC)
+# end modification
 E2APFLAGS = -I$(E2APSRC)
 E2SMFLAGS = -I$(E2SMSRC)
+
+# modified
+TINYXMLFLAGS = -I$(TINYXMLSRC)
+# end modification
 
 ########libs
 
@@ -45,11 +64,28 @@ E2AP_SRC= $(wildcard $(E2APSRC)/*.cc)
 E2SM_SRC= $(wildcard $(E2SMSRC)/*.cc)
 ASN1C_SRC= $(wildcard $(ASNSRC)/*.c)
 
+# modified
+TINYXML_SRC=$(wildcard $(TINYXMLSRC)/*.cpp)
+
+# PYTHON_RIC_MESSAGE_ENCODER_SRC = control_message_encoder_decoder.cc
+# HANDOVER_CONTROL_MESSAGE_SRC = handover_control_message.cc
+# CONTROL_MESSAGE_SRC = $(PYTHON_RIC_MESSAGE_ENCODER_SRC) $(HANDOVER_CONTROL_MESSAGE_SRC)
+CONTROL_MESSAGE_SRC=$(wildcard $(RICCONTROLSRC)/*.cc)
+# end modification
+
 ##############Objects
 UTIL_OBJ=${UTIL_SRC:.cc=.o}
 XAPP_OBJ=${XAPP_SRC:.cc=.o}
-HWXAPP_OBJ= ${HWXAPP_SRC:.cc=.o} 
-MSG_OBJ= ${MSG_SRC:.cc=.o}
+HWXAPP_OBJ=${HWXAPP_SRC:.cc=.o} 
+MSG_OBJ=${MSG_SRC:.cc=.o}
+
+# modified
+TINYXML_OBJ=${TINYXML_SRC:.cpp=.o}
+
+# PYTHON_RIC_MESSAGE_ENCODER_OBJ=${PYTHON_RIC_MESSAGE_ENCODER_SRC:.cc=.o} 
+# HANDOVER_CONTROL_MESSAGE_OBJ=${HANDOVER_CONTROL_MESSAGE_SRC:.cc=.o} 
+CONTROL_MESSAGE_OBJ = ${CONTROL_MESSAGE_SRC:.cc=.o}
+# end modification
 
 E2AP_OBJ = $(E2AP_SRC:.cc=.o)
 E2SM_OBJ = $(E2SM_SRC:.cc=.o)
@@ -65,7 +101,14 @@ $(XAPP_OBJ): export CPPFLAGS = $(BASEFLAGS) $(XAPPFLAGS) $(UTILFLAGS) $(MSGFLAGS
 
 $(HWXAPP_OBJ):export CPPFLAGS=$(BASEFLAGS) $(HWFLAGS) $(XAPPFLAGS) $(UTILFLAGS) $(MSGFLAGS) $(E2APFLAGS) $(E2SMFLAGS) $(ASNFLAGS)
 
-OBJ= $(HWXAPP_OBJ) $(UTIL_OBJ) $(MSG_OBJ)  $(ASN1C_MODULES) $(E2AP_OBJ) $(E2SM_OBJ) $(XAPP_OBJ)
+# modified
+$(TINYXML_OBJ):export CPPFLAGS= $(BASEFLAGS) $(TINYXMLFLAGS)
+
+$(CONTROL_MESSAGE_OBJ):export CPPFLAGS= $(BASEFLAGS) $(ASNFLAGS)
+# end modification
+
+#  $(CONTROL_MESSAGE_OBJ)
+OBJ= $(HWXAPP_OBJ) $(UTIL_OBJ) $(MSG_OBJ)  $(ASN1C_MODULES) $(E2AP_OBJ) $(E2SM_OBJ) $(XAPP_OBJ) $(TINYXML_OBJ)
 
 print-%  : ; @echo $* = $($*)
 

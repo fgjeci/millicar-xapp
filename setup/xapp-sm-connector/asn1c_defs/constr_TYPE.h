@@ -11,8 +11,8 @@
 #ifndef	_CONSTR_TYPE_H_
 #define	_CONSTR_TYPE_H_
 
-#include <ber_tlv_length.h>
-#include <ber_tlv_tag.h>
+#include "ber_tlv_length.h"
+#include "ber_tlv_tag.h"
 
 #ifdef __cplusplus
 extern "C" {

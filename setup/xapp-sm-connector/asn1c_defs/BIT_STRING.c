@@ -116,32 +116,79 @@ BIT_STRING_encode_xer(const asn_TYPE_descriptor_t *td, const void *sptr,
 	/*
 	 * Binary dump
 	 */
-	for(; buf < end; buf++) {
-		int v = *buf;
-		int nline = xcan?0:(((buf - st->buf) % 8) == 0);
-		if(p >= scend || nline) {
-			ASN__CALLBACK(scratch, p - scratch);
-			p = scratch;
-			if(nline) ASN__TEXT_INDENT(1, ilevel);
-		}
-		memcpy(p + 0, _bit_pattern[v >> 4], 4);
-		memcpy(p + 4, _bit_pattern[v & 0x0f], 4);
-		p += 8;
-	}
+	/*
+	 * Binary dump
+	 */
+    // original
+	// for(; buf < end; buf++) {
+	// 	int v = *buf;
+	// 	int nline = xcan?0:(((buf - st->buf) % 8) == 0);
+	// 	if(p >= scend || nline) {
+	// 		ASN__CALLBACK(scratch, p - scratch);
+	// 		p = scratch;
+	// 		if(nline) ASN__TEXT_INDENT(1, ilevel);
+	// 	}
+	// 	memcpy(p + 0, _bit_pattern[v >> 4], 4);
+	// 	memcpy(p + 4, _bit_pattern[v & 0x0f], 4);
+	// 	p += 8;
+	// }
 
-	if(!xcan && ((buf - st->buf) % 8) == 0)
-		ASN__TEXT_INDENT(1, ilevel);
-	ASN__CALLBACK(scratch, p - scratch);
-	p = scratch;
+	// if(!xcan && ((buf - st->buf) % 8) == 0)
+	// 	ASN__TEXT_INDENT(1, ilevel);
+	// ASN__CALLBACK(scratch, p - scratch);
+	// p = scratch;
 
-	if(buf == end) {
-		int v = *buf;
-		int ubits = st->bits_unused;
-		int i;
-		for(i = 7; i >= ubits; i--)
-			*p++ = (v & (1 << i)) ? 0x31 : 0x30;
-		ASN__CALLBACK(scratch, p - scratch);
+	// if(buf == end) {
+	// 	int v = *buf;
+	// 	int ubits = st->bits_unused;
+	// 	int i;
+	// 	for(i = 7; i >= ubits; i--)
+	// 		*p++ = (v & (1 << i)) ? 0x31 : 0x30;
+	// 	ASN__CALLBACK(scratch, p - scratch);
+	// }
+    // end original
+    // modified 
+    // we modify it here to print the stored value when dumped into an xml file 
+    // by having defied XER_F_BASIC
+    size_t i;
+    const char * const h2c = "0123456789ABCDEF";
+    
+    if (xcan){
+        // same as original
+        for(; buf < end; buf++) {
+        	int v = *buf;
+        	int nline = xcan?0:(((buf - st->buf) % 8) == 0);
+        	if(p >= scend || nline) {
+        		ASN__CALLBACK(scratch, p - scratch);
+        		p = scratch;
+        		if(nline) ASN__TEXT_INDENT(1, ilevel);
+        	}
+        	memcpy(p + 0, _bit_pattern[v >> 4], 4);
+        	memcpy(p + 4, _bit_pattern[v & 0x0f], 4);
+        	p += 8;
+        }
+
+        if(!xcan && ((buf - st->buf) % 8) == 0)
+        	ASN__TEXT_INDENT(1, ilevel);
+        ASN__CALLBACK(scratch, p - scratch);
+        p = scratch;
+
+        if(buf == end) {
+        	int v = *buf;
+        	int ubits = st->bits_unused;
+        	int i;
+        	for(i = 7; i >= ubits; i--)
+        		*p++ = (v & (1 << i)) ? 0x31 : 0x30;
+        	ASN__CALLBACK(scratch, p - scratch);
+        }
+    }else {
+        // we print it in a visible format 
+		int ret = BIT_STRING_print(td, sptr, ilevel,cb,app_key);
+        if(ret == -1)
+            ASN__ENCODE_FAILED;
+        
 	}
+    // end modification
 
 	if(!xcan) ASN__TEXT_INDENT(1, ilevel - 1);
 

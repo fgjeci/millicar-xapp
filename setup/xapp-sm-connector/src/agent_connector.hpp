@@ -29,4 +29,8 @@ void close_control_socket_agent(void);
 std::string find_agent_ip_from_gnb(unsigned char* gnb_id);
 int send_socket(char* buf, std::string dest_ip);
 
+// modified
+int send_payload_socket(char* buf, int buf_size, std::string dest_ip);
+// end modification
+
 #endif

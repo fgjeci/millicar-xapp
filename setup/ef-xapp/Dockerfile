@@ -3,6 +3,7 @@
 #------------------------------------
 ARG SCHEMA_PATH=schemas
 ARG XAPP_DIR=ef-xapp
+# ARG IPSO_DIR=ipso-xapp
 ARG CONNECTOR_DIR=xapp-sm-connector
 ARG STAGE_DIR=/home/${CONNECTOR_DIR}
 ARG DBAAS_SERVICE_HOST=10.0.2.12
@@ -19,6 +20,7 @@ ARG REPOBASE=https://gerrit.oran-osc.org/r
 ARG SCHEMA_FILE
 ARG SCHEMA_PATH
 ARG XAPP_DIR
+# ARG IPSO_DIR
 ARG CONNECTOR_DIR
 ARG STAGE_DIR
 
@@ -41,6 +43,7 @@ ENV RMR_RTG_SVC="9999" \
 
 COPY ${CONNECTOR_DIR} ${STAGE_DIR}
 COPY ${XAPP_DIR} /home/${XAPP_DIR}
+# COPY ${IPSO_DIR} /home/${IPSO_DIR}
 
 WORKDIR ${STAGE_DIR}
 
@@ -51,13 +54,16 @@ RUN apt-get remove -y --purge python* \
     python3 \
     python3-pip
 # Added - Install gymnasium for RL
-RUN pip install "ray[rllib]" \
-  && pip install tensorflow \
+RUN pip install xmltodict \
+  && pip install numpy \
+  && pip install pyswarms
+  # && pip install "ray[rllib]" \
+  # && pip install tensorflow \
 # pip install ray tensorflow torch\
-  && pip install gymnasium \
-  && pip install tensorflow-probability
-  
-  
+  # && pip install gymnasium \
+  # && pip install tensorflow-probability
+
+
   # && pip3 install gymnasium \
   # && pip3 install networkx
   # && pip3 install protobuf==3.19.6 \
@@ -77,7 +83,7 @@ RUN apt-get install -y \
     autoconf \
     pkg-config \
     gawk \
-    libtool 
+    libtool
 RUN apt-get install -y \
     wget \
     zlib1g-dev \
@@ -86,7 +92,7 @@ RUN apt-get install -y \
     vim \
     cpputest \
     libboost-all-dev \
-    libhiredis-dev 
+    libhiredis-dev
 # Install mdclog using debian package hosted at packagecloud.io
 RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/mdclog_${MDC_VER}_amd64.deb/download.deb \
   && wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/mdclog-dev_${MDC_VER}_amd64.deb/download.deb \
@@ -102,7 +108,7 @@ RUN wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/pack
 # Install RNIB libraries
   && wget -nv --content-disposition https://packagecloud.io/o-ran-sc/release/packages/debian/stretch/rnib_${RNIB_VER}_all.deb/download.deb \
   && dpkg -i rnib_${RNIB_VER}_all.deb \
-  && rm rnib_${RNIB_VER}_all.deb 
+  && rm rnib_${RNIB_VER}_all.deb
 # Install dbaas
 RUN cd ${STAGE_DIR} \
   && git clone https://gerrit.o-ran-sc.org/r/ric-plt/dbaas \
@@ -111,7 +117,7 @@ RUN cd ${STAGE_DIR} \
   && ./configure \
   && make -j ${nproc} all \
   && make install \
-  && rm -Rf ${STAGE_DIR}/dbaas 
+  && rm -Rf ${STAGE_DIR}/dbaas
 # Install sdl
 RUN cd ${STAGE_DIR} \
   && git clone https://gerrit.o-ran-sc.org/r/ric-plt/sdl \
@@ -120,7 +126,7 @@ RUN cd ${STAGE_DIR} \
   && ./configure \
   && make -j ${nproc} all \
   && make install \
-  && rm -Rf ${STAGE_DIR}/sdl 
+  && rm -Rf ${STAGE_DIR}/sdl
 # Install rapidjson
 RUN cd ${STAGE_DIR} \
   && git clone https://github.com/Tencent/rapidjson \
@@ -131,7 +137,7 @@ RUN cd ${STAGE_DIR} \
   && make -j ${nproc} \
   && make install \
   && cd ${STAGE_DIR} \
-  && rm -rf rapidjson 
+  && rm -rf rapidjson
 ##-----------------------------------
 # Now install the program
 #------------------------------------
@@ -152,3 +158,4 @@ RUN export CPATH=$CPATH:/usr/local/include \
   && apt-get autoremove -y \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
+

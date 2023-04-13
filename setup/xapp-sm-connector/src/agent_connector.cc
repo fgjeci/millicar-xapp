@@ -75,6 +75,8 @@ std::string find_agent_ip_from_gnb(unsigned char* gnb_id_trans) {
   // convert transaction identifier (unsigned char*) to string
   std::string gnb_id(reinterpret_cast<char*>(gnb_id_trans));
 
+  std::cout << "Searching gnb id " << gnb_id << std::endl;
+
   // check if gnb_id is already in agentIp_gnbId map
   bool found = false;
   for (it_gnb = agentIp_gnbId.begin(); it_gnb != agentIp_gnbId.end(); ++it_gnb) {
@@ -127,7 +129,9 @@ int send_socket(char* buf, std::string dest_ip) {
   // const size_t max_size = 512;
   // char buf[max_size] = "Hello, Server!";  // store the data in a buffer
   size_t data_size = strlen(buf);
+  // size_t data_size = sizeof(buf);
   int sent_size = send(control_sckfd ,buf, data_size, 0);
+  std::cout << "Message sent with size " << sent_size << " & data size " << data_size << std::endl;
 
   if(sent_size < 0) { // the send returns a size of -1 in case of errors
       std::cout <<  "ERROR: SEND to agent " << dest_ip << std::endl;
@@ -139,3 +143,39 @@ int send_socket(char* buf, std::string dest_ip) {
 
   return 0;
 }
+
+// modified
+// send through socket
+int send_payload_socket(char* buf, int buf_size, std::string dest_ip) {
+
+  int control_sckfd = -1;
+
+  // get socket file descriptor
+  std::map<std::string, int>::iterator it;
+  for (it = agentIp_socket.begin(); it != agentIp_socket.end(); ++it) {
+    std::string agent_ip = it->first;
+
+    if (dest_ip.compare(agent_ip) == 0) {
+      control_sckfd = it->second;
+      break;
+    }
+  }
+
+  if (control_sckfd == -1) {
+    std::cout << "ERROR: Could not find socket for destination " << dest_ip << std::endl;
+    return -1;
+  }
+
+  int sent_size = send(control_sckfd ,buf, buf_size, 0);
+
+  if(sent_size < 0) { // the send returns a size of -1 in case of errors
+      std::cout <<  "ERROR: SEND to agent " << dest_ip << std::endl;
+      return -2;
+  }
+  else {
+      std::cout << "Message sent" << std::endl;
+  }
+
+  return 0;
+}
+// end modification
