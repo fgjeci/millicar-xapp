@@ -69,7 +69,7 @@ void close_control_socket_agent(void) {
 std::string find_agent_ip_from_gnb(unsigned char* gnb_id_trans) {
 
   std::map<std::string, int>::iterator it_sck;
-  std::map<std::string, std::string>::iterator it_gnb;
+  std::map<std::string, std::list<std::string>>::iterator it_gnb; 
   std::string agent_ip;
 
   // convert transaction identifier (unsigned char*) to string
@@ -80,10 +80,14 @@ std::string find_agent_ip_from_gnb(unsigned char* gnb_id_trans) {
   // check if gnb_id is already in agentIp_gnbId map
   bool found = false;
   for (it_gnb = agentIp_gnbId.begin(); it_gnb != agentIp_gnbId.end(); ++it_gnb) {
-    if (gnb_id.compare(it_gnb->second) == 0) {
-      agent_ip = it_gnb->first;
-      found = true;
-      break;
+    // check if string (gnb_id) is in list
+    for (std::list<std::string>::iterator it = it_gnb->second.begin(); it != it_gnb->second.end(); ++it){
+      std::cout << "Comparing local " << (*it) << " with " << gnb_id << std::endl;
+      if((*it).compare(gnb_id) == 0){
+        agent_ip = it_gnb->first;
+        found = true;
+        break;
+      }
     }
   }
 
@@ -94,8 +98,16 @@ std::string find_agent_ip_from_gnb(unsigned char* gnb_id_trans) {
 
       it_gnb = agentIp_gnbId.find(agent_ip);
       if (it_gnb == agentIp_gnbId.end()) {
-        // insert into agentIp_gnbId map
-        agentIp_gnbId[agent_ip] = gnb_id;
+        // insert into agentIp_gnbId map, as single element since is the first time
+        std::cout << "Inserting gnb " << gnb_id << " to agent " << agent_ip << std::endl;
+        agentIp_gnbId[agent_ip].push_back(gnb_id);
+        break;
+      }
+      else{
+        // means the gnb id has not been inserted in the list, so we insert it
+        // the main entry in the map exists
+        std::cout << "Inserting gnb " << gnb_id << " to agent " << agent_ip << std::endl;
+        agentIp_gnbId[agent_ip].push_back(gnb_id);
         break;
       }
     }
@@ -146,7 +158,7 @@ int send_socket(char* buf, std::string dest_ip) {
 
 // modified
 // send through socket
-int send_payload_socket(char* buf, int buf_size, std::string dest_ip) {
+int send_payload_socket(const void* buf, int buf_size, std::string dest_ip) {
 
   int control_sckfd = -1;
 
@@ -173,7 +185,7 @@ int send_payload_socket(char* buf, int buf_size, std::string dest_ip) {
       return -2;
   }
   else {
-      std::cout << "Message sent" << std::endl;
+      std::cout << "Message sent with size " << " " << sent_size << std::endl;
   }
 
   return 0;

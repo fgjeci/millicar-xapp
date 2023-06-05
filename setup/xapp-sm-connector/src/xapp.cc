@@ -23,11 +23,14 @@
  */
 
 #include "xapp.hpp"
+#include <map>
+#include <list>
+
 
 #define BUFFER_SIZE 1024
 
 std::map<string, int> agentIp_socket;
-std::map<std::string, std::string> agentIp_gnbId;
+std::map<std::string, std::list<std::string> > agentIp_gnbId; 
 std::vector<std::string> drl_agent_ip{AGENT_0};
 
  Xapp::Xapp(XappSettings &config, XappRmr &rmr){
@@ -110,7 +113,9 @@ void Xapp::startup(SubscriptionHandler &sub_ref) {
         }
     } else if (strcmp(GNB_ID, "ns-o-ran") == 0) {
         std::vector <std::string> gnb_ids{"gnb:131-133-31000000", "gnb:131-133-32000000", "gnb:131-133-33000000",
-                                          "gnb:131-133-34000000", "gnb:131-133-35000000"};
+                                          "gnb:131-133-34000000", "gnb:131-133-35000000", "gnb:131-133-36000000", 
+                                          "gnb:131-133-37000000", "gnb:131-133-38000000", "gnb:131-133-39000000", 
+                                          "gnb:131-133-40000000", "gnb:131-133-41000000"};
         for (vector<string>::iterator it = gnb_ids.begin(); it != gnb_ids.end(); it++) {
             std::cout << "gNB read: " << *it << std::endl;
             rnib_gnblist.push_back(*it);
@@ -203,18 +208,25 @@ void Xapp::handle_rx_msg(void) {
             int rcv_size = recv(control_sckfd, buf, max_size, 0);
             if (rcv_size > 0) {
                 std::cout << "Message from agent " << agent_ip << std::endl;
-                std::cout << buf << std::endl;
+                std::cout << "size" << rcv_size << " buff " << buf << std::endl;
 
                 // get gnb_id from agent IP
-                std::map<std::string, std::string>::iterator it_gnb;
+                // std::map<std::string, list<std::string>>::iterator it_gnb;
+                std::map<std::string, std::list<std::string>>::iterator it_gnb;
+                // auto it_gnb = agentIp_gnbId.find(agent_ip);
                 it_gnb = agentIp_gnbId.find(agent_ip);
 
                 // send RIC control request
                 if (it_gnb != agentIp_gnbId.end()) {
-                    send_ric_control_request(buf, it_gnb->second);
+                    // in the second element of the map we have a list of gnb ids
+                    for(auto i = it_gnb->second.begin(); i != it_gnb->second.end(); ++i)
+                    {
+
+                        std::cout << "Sending ric control message to " << std::string(*i) << std::endl;
+                        send_ric_control_request(buf, std::string(*i), rcv_size);
+                    }
                 }
                 else {
-                    // send_ric_control_request(buf, std::to_string(1));
                     std::cout << "ERROR: No gNB ID found for agent " << agent_ip << std::endl;
                 }
 
@@ -242,16 +254,22 @@ void Xapp::handle_rx_msg_agent(std::string agent_ip) {
 
             int rcv_size = recv(control_sckfd, buf, max_size, 0);
             if (rcv_size > 0) {
-                std::cout << "Message from agent " << agent_ip << std::endl;
-                std::cout << buf << std::endl;
+                // std::cout << "Message from agent " << agent_ip << std::endl;
+                // std::cout << "size" << rcv_size << " buff " << buf << std::endl;
 
                 // get gnb_id from agent IP
-                std::map<std::string, std::string>::iterator it_gnb;
+                // std::map<std::string, list<std::string>>::iterator it_gnb;
+                std::map<std::string, std::list<std::string>>::iterator it_gnb;
+                // auto it_gnb = agentIp_gnbId.find(agent_ip);
                 it_gnb = agentIp_gnbId.find(agent_ip);
 
                 // send RIC control request
                 if (it_gnb != agentIp_gnbId.end()) {
-                send_ric_control_request(buf, it_gnb->second);
+                    // in the second element of the map we have a list of gnb ids
+                    for(auto i = it_gnb->second.begin(); i != it_gnb->second.end(); ++i)
+                    {
+                        send_ric_control_request(buf, (*i), rcv_size);
+                    }
                 }
                 else {
                 std::cout << "ERROR: No gNB ID found for agent " << agent_ip << std::endl;
@@ -333,11 +351,22 @@ void Xapp::terminate_du_reporting(void) {
         int control_sckfd = it->second;
 
         // get gnb_id from agent IP
-        std::map<std::string, std::string>::iterator it_gnb;
+        std::map<std::string, std::list<std::string>>::iterator it_gnb;
+        // auto it_gnb = agentIp_gnbId.find(agent_ip);
         it_gnb = agentIp_gnbId.find(agent_ip);
 
-        std::cout << "Terminating reporting gNB " << it_gnb->second << std::endl;
-        send_ric_control_request(XAPP_TERMINATE, it_gnb->second);
+        // send RIC control request
+        if (it_gnb != agentIp_gnbId.end()) {
+            // in the second element of the map we have a list of gnb ids
+            for(std::list<std::string>::iterator i = it_gnb->second.begin(); i != it_gnb->second.end(); ++i)
+            {
+                
+                std::cout << "Terminating reporting gNB " << (*i) << std::endl;
+                send_ric_control_request(XAPP_TERMINATE, (*i), -1);
+            }
+        }
+
+        
     }
 
     // stop xapp docker container with SIGTERM (15)
@@ -350,7 +379,7 @@ void Xapp::terminate_du_reporting(void) {
     }
 }
 
-void Xapp::send_ric_control_request(char* payload, std::string gnb_id) {
+void Xapp::send_ric_control_request(char* payload, std::string gnb_id, int recv_size) {
 
     std::cout << "Sending RIC Control Request" << std::endl;
 
@@ -394,8 +423,12 @@ void Xapp::send_ric_control_request(char* payload, std::string gnb_id) {
  	//	6
  	//};
 	const char* msg = payload;
-	din.control_msg_size = strlen(msg) + 1;
-	mdclog_write(MDCLOG_INFO, "Size of msg %d", din.control_msg_size);
+    if(recv_size == -1){
+        din.control_msg_size = strlen(msg) + 1;
+    }else{
+        din.control_msg_size = recv_size;
+    }
+	mdclog_write(MDCLOG_INFO, "Size of msg %ld", din.control_msg_size);
 	din.control_msg = (uint8_t*) calloc(din.control_msg_size, sizeof(uint8_t));
 	std::memcpy(din.control_msg, msg, din.control_msg_size);
  	ric_control_helper dout {};
@@ -414,7 +447,7 @@ void Xapp::send_ric_control_request(char* payload, std::string gnb_id) {
 	rmr_header.payload_length = buf_size; //data_size
 	strcpy((char*)rmr_header.meid, gnb_id.c_str());
 
-	mdclog_write(MDCLOG_INFO, "Sending CTRL REQ in file= %s, line=%d for MEID %s", __FILE__, __LINE__, meid);
+	mdclog_write(MDCLOG_INFO, "Sending CTRL  REQ in file= %s, line=%d for MEID %s", __FILE__, __LINE__, meid);
 
     int result = rmr_ref->xapp_rmr_send(&rmr_header, (void*)buf);
     if(result) {

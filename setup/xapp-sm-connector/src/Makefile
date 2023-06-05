@@ -12,7 +12,7 @@ E2SMSRC:=./xapp-asn/e2sm
 
 # modified
 TINYXMLSRC:=./xapp-tinyxml2
-RICCONTROLSRC:=./xapp-ric-control
+RICCONTROLSRC:=./xapp_ric_control
 # end modification
 
 ####### Logging library and flags
@@ -34,7 +34,7 @@ C_BASEFLAGS= -Wall $(CLOGFLAGS) -DASN_DISABLE_OER_SUPPORT
 XAPPFLAGS= -I./
 HWFLAGS= -I./
 UTILFLAGS= -I$(UTILSRC)
-MSGFLAGS= -I$(MSGSRC)
+MSGFLAGS= -I$(MSGSRC) 
 
 # original
 ASNFLAGS=-I$(ASNSRC) -DASN_DISABLE_OER_SUPPORT
@@ -47,6 +47,8 @@ E2SMFLAGS = -I$(E2SMSRC)
 
 # modified
 TINYXMLFLAGS = -I$(TINYXMLSRC)
+
+CONTROLMESSAGEFLAGS = -I$(RICCONTROLSRC)
 # end modification
 
 ########libs
@@ -70,6 +72,7 @@ TINYXML_SRC=$(wildcard $(TINYXMLSRC)/*.cpp)
 # PYTHON_RIC_MESSAGE_ENCODER_SRC = control_message_encoder_decoder.cc
 # HANDOVER_CONTROL_MESSAGE_SRC = handover_control_message.cc
 # CONTROL_MESSAGE_SRC = $(PYTHON_RIC_MESSAGE_ENCODER_SRC) $(HANDOVER_CONTROL_MESSAGE_SRC)
+#  $(RICCONTROLSRC)/E2SM-RC-ControlMessage.c
 CONTROL_MESSAGE_SRC=$(wildcard $(RICCONTROLSRC)/*.cc)
 # end modification
 
@@ -104,7 +107,7 @@ $(HWXAPP_OBJ):export CPPFLAGS=$(BASEFLAGS) $(HWFLAGS) $(XAPPFLAGS) $(UTILFLAGS) 
 # modified
 $(TINYXML_OBJ):export CPPFLAGS= $(BASEFLAGS) $(TINYXMLFLAGS)
 
-$(CONTROL_MESSAGE_OBJ):export CPPFLAGS= $(BASEFLAGS) $(ASNFLAGS)
+$(CONTROL_MESSAGE_OBJ):export CPPFLAGS= $(C_BASEFLAGS) $(BASEFLAGS) $(HWFLAGS) $(XAPPFLAGS) $(UTILFLAGS) $(MSGFLAGS) $(E2APFLAGS) $(E2SMFLAGS) $(ASNFLAGS)
 # end modification
 
 #  $(CONTROL_MESSAGE_OBJ)
@@ -115,8 +118,17 @@ print-%  : ; @echo $* = $($*)
 hw_xapp_main: $(OBJ)
 	$(CXX) -o $@  $(OBJ) $(LIBS) $(RNIBFLAGS) $(CPPFLAGS) $(CLOGFLAGS) agent_connector.cc
 
+# test_msg_creation: $(OBJ)
+# 	$(CXX) -o $@  $(OBJ) $(LIBS) $(RNIBFLAGS) $(CPPFLAGS) $(CLOGFLAGS) $(CONTROLMESSAGEFLAGS) test_msg_creation.cc
+
+
+# install: hw_xapp_main test_msg_creation
+# 	install  -D hw_xapp_main  /usr/local/bin/hw_xapp_main
+# 	install  -D test_msg_creation  /usr/local/bin/test_msg_creation
+
 install: hw_xapp_main
 	install  -D hw_xapp_main  /usr/local/bin/hw_xapp_main
 
+# $(RICCONTROLSRC)/*.o test_msg_creation
 clean:
 	-rm *.o $(ASNSRC)/*.o $(E2APSRC)/*.o $(UTILSRC)/*.o $(E2SMSRC)/*.o  $(MSGSRC)/*.o $(SRC)/*.o hw_xapp_main 

@@ -48,6 +48,7 @@
 #include "agent_connector.hpp"
 #include <vector>
 
+
 #include "msgs_proc.hpp"
 #include "subs_mgmt.hpp"
 #include "xapp_config.hpp"
@@ -101,7 +102,7 @@ public:
 private:
   void startup_subscribe_requests(void );
   void shutdown_subscribe_deletes(void);
-  void send_ric_control_request(char* payload, std::string gnb_id);
+  void send_ric_control_request(char* payload, std::string gnb_id, int recv_size);
   void startup_get_policies(void );
 
   void handle_rx_msg(void);

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <control_message_encoder_decoder.h>
+#include <xapp_ric_control/control_message_encoder_decoder.h>
 
 int main(){
     // std::cout << "Hello there " <<std::endl;
@@ -11,7 +11,9 @@ int main(){
     uint16_t* end_position;
     size_t length; 
     sctp_buffer_t* result;
-    result = gnerate_e2ap_encode_handover_control_message(ue_id, start_position, end_position, length);
+    const char* plmnId = "111";
+    // result = gnerate_e2ap_encode_handover_control_message(ue_id, start_position, end_position, length);
+    result = generate_e2ap_encode_handover_control_message_plmn(ue_id, start_position, end_position, length, plmnId);
 
     std::cout << "Lenght " << result->length << std::endl;
 }

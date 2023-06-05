@@ -25,7 +25,7 @@ if( MAN_PREFIX )
         set( install_man ${MAN_PREFIX} )                        # is there a cmake var for this -- can't find one
 else()
         set( install_man "/usr/share/man" )                     # this needs to be fixed so it's not hard coded
-endif()
+endif() 
 
 include ( GNUInstallDirs )
 
@@ -81,7 +81,7 @@ set ( srcd "${CMAKE_CURRENT_SOURCE_DIR}" )
 # but Cmake insists on having these exist when we add them to include directories to
 # enable code to find them after we build them.
 #
-include_directories("${srcd}/asn1c_defs;${srcd}/src/xapp-ric-control" )
+include_directories("${srcd}/asn1c_defs;${srcd}/src/xapp_ric_control" )
 
 
 # Compiler flags
@@ -101,7 +101,7 @@ endif()
 unset( GPROF CACHE )					# we don't want this to persist
 
 add_subdirectory(asn1c_defs)
-add_subdirectory(src/xapp-ric-control)
+add_subdirectory(src/xapp_ric_control)
 
 # we only build/export the static archive (.a) if generating a dev package
 if( DEV_PKG )
@@ -116,7 +116,7 @@ if( DEV_PKG )
    			       VERSION ${major_version}.${minor_version}.${patch_level}
 	)
 
-	target_include_directories(e2sim_static PRIVATE "asn1c_defs" PUBLIC "src/xapp-ric-control")	
+	target_include_directories(e2sim_static PUBLIC "asn1c_defs" PUBLIC "src/xapp_ric_control")	
 	target_include_directories(e2sim_static PUBLIC "/usr/local/${install_inc}")
 	# target_include_directories( e2sim_static PUBLIC include)
 else()
@@ -129,7 +129,7 @@ else()
    			       SOVERSION 1
    			       VERSION ${major_version}.${minor_version}.${patch_level}
 	)
-	target_include_directories(e2sim_shared PRIVATE "asn1c_defs" PUBLIC "src/xapp-ric-control")	
+	target_include_directories(e2sim_shared PUBLIC "asn1c_defs" PUBLIC "src/xapp_ric_control")	
 	target_include_directories(e2sim_shared PUBLIC "/usr/local/${install_inc}")
 endif()
 

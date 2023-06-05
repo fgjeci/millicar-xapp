@@ -65,5 +65,6 @@
         "cstring": "cpp",
         "e2sm-kpm-indicationmessage-format1.h": "c",
         "list": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/ugjeci/repos/millicar-xapp/setup/xapp-sm-connector"
 }

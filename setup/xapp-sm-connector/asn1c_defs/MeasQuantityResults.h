@@ -15,6 +15,7 @@
 #include "RSRP-Range.h"
 #include "RSRQ-Range.h"
 #include "SINR-Range.h"
+#include "MCS.h"
 #include <constr_SEQUENCE.h>
 
 #ifdef __cplusplus
@@ -30,6 +31,9 @@ typedef struct MeasQuantityResults {
 	 * This type is extensible,
 	 * possible extensions are below.
 	 */
+	// modified
+	MCS_t			*mcs;
+	// end modification
 	
 	/* Context for parsing across buffer boundaries */
 	asn_struct_ctx_t _asn_ctx;
@@ -38,7 +42,7 @@ typedef struct MeasQuantityResults {
 /* Implementation */
 extern asn_TYPE_descriptor_t asn_DEF_MeasQuantityResults;
 extern asn_SEQUENCE_specifics_t asn_SPC_MeasQuantityResults_specs_1;
-extern asn_TYPE_member_t asn_MBR_MeasQuantityResults_1[3];
+extern asn_TYPE_member_t asn_MBR_MeasQuantityResults_1[4];
 
 #ifdef __cplusplus
 }

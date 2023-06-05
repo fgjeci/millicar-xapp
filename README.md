@@ -1,2 +1,2 @@
-# ef-xapp
-Elephant flow xapp
+# millicar-xapp
+Millicar xapp

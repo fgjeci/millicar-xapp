@@ -35,24 +35,34 @@ asn_TYPE_member_t asn_MBR_MeasQuantityResults_1[] = {
 		0, 0, /* No default value */
 		"sinr"
 		},
+	{ ATF_POINTER, 1, offsetof(struct MeasQuantityResults, mcs),
+		(ASN_TAG_CLASS_CONTEXT | (3 << 2)),
+		-1,	/* IMPLICIT tag at current level */
+		&asn_DEF_MCS,
+		0,
+		{ 0, 0, 0 },
+		0, 0, /* No default value */
+		"mcs"
+		},
 };
-static const int asn_MAP_MeasQuantityResults_oms_1[] = { 0, 1, 2 };
+static const int asn_MAP_MeasQuantityResults_oms_1[] = { 0, 1, 2, 3 };
 static const ber_tlv_tag_t asn_DEF_MeasQuantityResults_tags_1[] = {
 	(ASN_TAG_CLASS_UNIVERSAL | (16 << 2))
 };
 static const asn_TYPE_tag2member_t asn_MAP_MeasQuantityResults_tag2el_1[] = {
     { (ASN_TAG_CLASS_CONTEXT | (0 << 2)), 0, 0, 0 }, /* rsrp */
     { (ASN_TAG_CLASS_CONTEXT | (1 << 2)), 1, 0, 0 }, /* rsrq */
-    { (ASN_TAG_CLASS_CONTEXT | (2 << 2)), 2, 0, 0 } /* sinr */
+    { (ASN_TAG_CLASS_CONTEXT | (2 << 2)), 2, 0, 0 }, /* sinr */
+	{ (ASN_TAG_CLASS_CONTEXT | (3 << 2)), 3, 0, 0 } /* mcs */
 };
 asn_SEQUENCE_specifics_t asn_SPC_MeasQuantityResults_specs_1 = {
 	sizeof(struct MeasQuantityResults),
 	offsetof(struct MeasQuantityResults, _asn_ctx),
 	asn_MAP_MeasQuantityResults_tag2el_1,
-	3,	/* Count of tags in the map */
+	4,	/* Count of tags in the map */
 	asn_MAP_MeasQuantityResults_oms_1,	/* Optional members */
-	3, 0,	/* Root/Additions */
-	3,	/* First extension addition */
+	4, 0,	/* Root/Additions */
+	4,	/* First extension addition */
 };
 asn_TYPE_descriptor_t asn_DEF_MeasQuantityResults = {
 	"MeasQuantityResults",
@@ -66,7 +76,7 @@ asn_TYPE_descriptor_t asn_DEF_MeasQuantityResults = {
 		/sizeof(asn_DEF_MeasQuantityResults_tags_1[0]), /* 1 */
 	{ 0, 0, SEQUENCE_constraint },
 	asn_MBR_MeasQuantityResults_1,
-	3,	/* Elements count */
+	4,	/* Elements count */
 	&asn_SPC_MeasQuantityResults_specs_1	/* Additional specs */
 };
 

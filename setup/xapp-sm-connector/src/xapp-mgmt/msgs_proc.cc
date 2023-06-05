@@ -187,7 +187,7 @@ bool  XappMsgHandler::a1_policy_handler(char * message, int *message_len, a1_pol
 
 //For processing received messages.XappMsgHandler should mention if resend is required or not.
 void XappMsgHandler::operator()(rmr_mbuf_t *message, bool *resend){
-
+	mdclog_write(MDCLOG_INFO, "Received RIC message");
 	if (message->len > MAX_RMR_RECV_SIZE){
 		mdclog_write(MDCLOG_ERR, "Error : %s, %d, RMR message larger than %d. Ignoring ...", __FILE__, __LINE__, MAX_RMR_RECV_SIZE);
 		return;
@@ -207,7 +207,7 @@ void XappMsgHandler::operator()(rmr_mbuf_t *message, bool *resend){
 
 			mdclog_write(MDCLOG_INFO, "Received RIC indication message of type = %d", message->mtype);
 
-			unsigned char *me_id_null;
+			unsigned char *me_id_null; 
 			unsigned char *me_id = rmr_get_meid(message, me_id_null);
 			mdclog_write(MDCLOG_INFO,"RMR Received MEID: %s",me_id);
 
@@ -259,15 +259,19 @@ void XappMsgHandler::operator()(rmr_mbuf_t *message, bool *resend){
 void process_ric_indication(int message_type, transaction_identifier id, const void *message_payload, size_t message_len) {
 	mdclog_write(MDCLOG_INFO,"In Process RIC indication with size: %ld",message_len);
 	// std::cout << "In Process RIC indication with size " << message_len << std::endl;
-	std::cout << "ID " << id << std::endl;
+
+	std::string agent_ip = find_agent_ip_from_gnb(id); 
+	mdclog_write(MDCLOG_INFO,"Sending data to agent %s ", agent_ip.c_str());
+	
+	send_payload_socket(message_payload, message_len, agent_ip); 
 
 	// decode received message payload
 	E2AP_PDU_t *pdu = nullptr;
 	auto retval = asn_decode(nullptr, ATS_ALIGNED_BASIC_PER, &asn_DEF_E2AP_PDU, (void **) &pdu, message_payload, message_len);
-		
+	
 	// print decoded payload
 	if (retval.code == RC_OK) {
-		char *printBuffer;
+		char *printBuffer; 
 		size_t size;
 		FILE *stream = open_memstream(&printBuffer, &size);
 		// asn_fprint(stream, &asn_DEF_E2AP_PDU, pdu);
@@ -276,11 +280,11 @@ void process_ric_indication(int message_type, transaction_identifier id, const v
 
 		// send payload to agent
 		// std::string agent_ip = find_agent_ip_from_gnb(gnb_id);
-		// send_socket(payload, agent_ip);
+		// send_socket(payload, agent_ip); 
 		// send_payload_socket((char*)message_payload, message_len, "127.0.0.1");
 		// send_socket((char*)message_payload, "127.0.0.1");
 
-		uint8_t res = procRicIndication(pdu, id);
+		// uint8_t res = procRicIndication(pdu, id);
 	}
 	else {
 		std::cout << "process_ric_indication, retval.code " << retval.code << std::endl;
@@ -292,11 +296,6 @@ void process_ric_indication(int message_type, transaction_identifier id, const v
  * TODO doxy
  */
 
-// uint8_t procRicIndication(E2AP_PDU_t *e2apMsg, transaction_identifier gnb_id){
-
-// }
-
-// 
 uint8_t procRicIndication(E2AP_PDU_t *e2apMsg, transaction_identifier gnb_id)
 {
 	mdclog_write(MDCLOG_INFO,"In Process RIC indication");

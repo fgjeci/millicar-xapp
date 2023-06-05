@@ -132,13 +132,15 @@ void XappRmr::xapp_rmr_receive(MsgHandler&& msgproc, XappRmr *parent){
 		{
 			mdclog_write(MDCLOG_INFO,"RMR Received Message of Type: %d, Message length: %d", this->_xapp_received_buff->mtype, this->_xapp_received_buff->len);
 
-			char printBuffer[4096] = {0};
+			char printBuffer[40960] = {0};
 			char *tmp = printBuffer;
 			for (size_t i = 0; i < (size_t)_xapp_received_buff->len; ++i) {
 					snprintf(tmp, 3, "%02x", _xapp_received_buff->payload[i]);
 					tmp += 2;
 			}
 			mdclog_write(MDCLOG_INFO,"RMR Received Message: %s", printBuffer);
+
+			mdclog_write(MDCLOG_INFO,"Max buffer: %d", 40960);
 
 		    //in case message handler returns true, need to resend the message.
 			msgproc(this->_xapp_received_buff, resend);
