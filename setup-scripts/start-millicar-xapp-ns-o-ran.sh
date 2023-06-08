@@ -4,7 +4,7 @@ docker rm millicar-xapp-24
 # docker rmi millicar-xapp:latest
 ./setup-millicar-xapp.sh ns-o-ran
 
-# docker exec -it millicar-xapp-24 bash
+docker exec -it millicar-xapp-24 bash
 
 # docker kill ef-xapp
 # docker rm ef-xapp

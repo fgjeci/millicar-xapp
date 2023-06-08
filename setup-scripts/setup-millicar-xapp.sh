@@ -18,12 +18,12 @@ ENTRYPOINT=/bin/bash
 GNB_ID=$1
 
 # echo $GNB_ID
-# echo $XAPP_IP
+# echo $XAPP_IP2
 
 # if changing xApp IP or ID, you need to define new RMR routes
 # in the setup-ric.sh/setup-lib.sh scripts and restart the RIC
-XAPP_IP=$XAPP_IP
-XAPP_ID=$(echo $XAPP_IP | cut -d "." -f 4)
+XAPP_IP2=$XAPP_IP2
+XAPP_ID=$(echo $XAPP_IP2 | cut -d "." -f 4)
 
 CONTAINER_NAME=${IMAGE_NAME}-${XAPP_ID}
 # CONTAINER_NAME=${IMAGE_NAME}
@@ -39,8 +39,8 @@ if [ ! $? -eq 0 ]; then
             cp ${MODEL_DIR}/${DOCKER_FILE} ./${DOCKER_FILE}_${IMAGE_NAME}
 
 	    $SUDO docker build  \
-            --build-arg DBAAS_SERVICE_HOST=$DBAAS_IP \
-            --build-arg DBAAS_SERVICE_PORT=$DBAAS_PORT \
+            --build-arg DBAAS_SERVICE_HOST=$DBAAS_IP2 \
+            --build-arg DBAAS_SERVICE_PORT=$DBAAS_PORT2 \
             -f ${DOCKER_FILE}_${IMAGE_NAME} -t ${IMAGE_NAME}:$tagvers .
 
             # remove copied Dockerfile
@@ -63,11 +63,11 @@ remove_container() {
 remove_container ${CONTAINER_NAME}
 
 # replace parameters, recompile code and restart container
-$SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network ric --ip ${XAPP_IP} \
-    -e DBAAS_SERVICE_HOST=$DBAAS_IP -e DBAAS_SERVICE_PORT=$DBAAS_PORT --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
+$SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network ric2 --ip ${XAPP_IP2} \
+    -e DBAAS_SERVICE_HOST=$DBAAS_IP2 -e DBAAS_SERVICE_PORT=$DBAAS_PORT2 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
 
-# $SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network=ric --ip ${XAPP_IP} -p :36422:36422/sctp\
-#     -e DBAAS_SERVICE_HOST=$DBAAS_IP -e DBAAS_SERVICE_PORT=$DBAAS_PORT --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
+# $SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network=ric --ip ${XAPP_IP2} -p :36422:36422/sctp\
+#     -e DBAAS_SERVICE_HOST=$DBAAS_IP2 -e DBAAS_SERVICE_PORT=$DBAAS_PORT2 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
 
 
 if [ -n "${GNB_ID}" ]; then
