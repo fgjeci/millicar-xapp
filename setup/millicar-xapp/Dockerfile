@@ -54,7 +54,8 @@ RUN apt-get remove -y --purge python* \
 # Added - Install gymnasium for RL
 RUN pip install xmltodict \
   && pip install numpy \
-  && pip install pyswarms
+  && pip install pyswarms \
+  && pip install more-itertools
   # && pip install "ray[rllib]" \
   # && pip install tensorflow \
 # pip install ray tensorflow torch\

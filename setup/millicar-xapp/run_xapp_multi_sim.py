@@ -9,17 +9,48 @@ import transform_xml_to_dict_millicar as transform
 from ctrl_msg_encoder_decoder import RicControlMessageEncoder
 from millicar_pre_optimize import MillicarPreoptimize
 from millicar_optimization import MillicarFormulation
+import itertools
 
 _simulation_map = [
-    [111, 0, 'no relay'],
-    [112, 0, 'distance'],
-    [113, 0, 'sinr'],
-    [114, -5, 'no relay'],
-    [115, -5, 'distance'],
-    [116, -5, 'sinr'],
-    [117, -10, 'no relay'],
-    [118, -10, 'distance'],
-    [119, -10, 'sinr'],
+    [111, 0, 'no_relay', 2] ,
+    [112, -15, 'distance', 2] ,
+    [113, -15, 'sinr', 2] ,
+    [114, -10, 'distance', 2] ,
+    [115, -10, 'sinr', 2] ,
+    [116, -5, 'distance', 2] ,
+    [117, -5, 'sinr', 2] ,
+    [118, 0, 'distance', 2] ,
+    [119, 0, 'sinr', 2] ,
+    [120, 5, 'distance', 2] ,
+    [121, 5, 'sinr', 2] ,
+    [122, 10, 'distance', 2] ,
+    [123, 10, 'sinr', 2] ,
+    [124, 0, 'no_relay', 4] ,
+    [125, -15, 'distance', 4] ,
+    [126, -15, 'sinr', 4] ,
+    [127, -10, 'distance', 4] ,
+    [128, -10, 'sinr', 4] ,
+    [129, -5, 'distance', 4] ,
+    [130, -5, 'sinr', 4] ,
+    [131, 0, 'distance', 4] ,
+    [132, 0, 'sinr', 4] ,
+    [133, 5, 'distance', 4] ,
+    [134, 5, 'sinr', 4] ,
+    [135, 10, 'distance', 4] ,
+    [136, 10, 'sinr', 4] ,
+    [137, 0, 'no_relay', 6] ,
+    [138, -15, 'distance', 6] ,
+    [139, -15, 'sinr', 6] ,
+    [140, -10, 'distance', 6] ,
+    [141, -10, 'sinr', 6] ,
+    [142, -5, 'distance', 6] ,
+    [143, -5, 'sinr', 6] ,
+    [144, 0, 'distance', 6] ,
+    [145, 0, 'sinr', 6] ,
+    [146, 5, 'distance', 6] ,
+    [147, 5, 'sinr', 6] ,
+    [148, 10, 'distance', 6] ,
+    [149, 10, 'sinr', 6]
 ]
 
 class XmlToDictManager:
@@ -32,7 +63,7 @@ class XmlToDictManager:
         _sim_map_filter = list(filter(lambda _sim: str(_sim[0]) == str(plmn), _simulation_map))
         _relay_threshold = 46
         if len(_sim_map_filter) == 1:
-            _relay_threshold += _sim_map_filter[0][1]
+            _relay_threshold += 2*_sim_map_filter[0][1]
         self.preoptimize_queue = MillicarPreoptimize(peer_measurements_history_depth=5,
                                                      to_relay_threshold=_relay_threshold)
     
@@ -60,7 +91,11 @@ def _optimize_and_send_data(transform: XmlToDictManager, sendingDataCallback):
         elif _optimization_type == 'sinr':
             print("Sinr optimization")
             _all_relays: List[List[int]] = _formulation.optimize()
+        # print("basic links")
+        # print(_formulation.preoptimize.genuine_links_relay)
 
+    # removing duplicates in the list
+    _all_relays = list(k for k,_ in itertools.groupby(_all_relays))
 
     # transform data 
     _source_rntis = [_relay[0] for _relay in _all_relays]

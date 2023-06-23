@@ -2,6 +2,7 @@ from queue import Queue
 from transform_xml_to_dict_millicar import MillicarUeSingleReport
 from typing import List, Tuple
 import numpy as np
+from more_itertools import locate
 
 
 class MillicarPreoptimize:
@@ -17,6 +18,50 @@ class MillicarPreoptimize:
         self._all_rntis = []
         self.to_relay_threshold = to_relay_threshold # if a connection reaches this threshold, it is defined as to be relayed,
         # this due to conversion
+        self.genuine_links_relay: List[List[int]] = self._get_communication_rnti_tuples()
+
+    def set_genuine_link(self, rnti: int, peer_rnti: int, relay_rnti: int)->bool:
+        _entry_inserted = False
+        _indexes_first_direction_ = list(locate(self.genuine_links_relay, 
+                                           lambda _single_link: ((_single_link[0] == rnti) & \
+                                                (_single_link[1] == peer_rnti))))
+        _indexes_sec_direction_ = list(locate(self.genuine_links_relay, 
+                                         lambda _single_link: ((_single_link[0] == peer_rnti) & \
+                                                (_single_link[1] == rnti))))
+        
+        if len(_indexes_first_direction_)==1:
+            _entry_inserted = self.genuine_links_relay[_indexes_first_direction_[0]][2] != relay_rnti
+
+            self.genuine_links_relay[_indexes_first_direction_[0]][2] = relay_rnti
+            
+        elif len(_indexes_sec_direction_)==1:
+            _entry_inserted = self.genuine_links_relay[_indexes_sec_direction_[0]][2] != relay_rnti
+            self.genuine_links_relay[_indexes_sec_direction_[0]][2] = relay_rnti
+        return _entry_inserted
+
+
+    def get_original_link_tuple(self, rnti:int, peer_rnti:int )-> Tuple[int, int, int]:
+        _filter_1 = list(filter(lambda _single_link: ((_single_link[0] == peer_rnti) | \
+                                                    (_single_link[0] == rnti)), self.genuine_links_relay))
+        _filter_2 = list(filter(lambda _single_link: ((_single_link[1] == peer_rnti) | \
+                                                    (_single_link[1] == rnti)), self.genuine_links_relay))
+        
+        if len(_filter_1) >0:
+            return _filter_1[0]
+        elif len(_filter_2) >0:
+            return _filter_2[0]
+        else:
+            return (-1, -1, -1)
+
+    def _get_communication_rnti_tuples(self)-> List[List[int]]:
+        _nr_groups = 6
+        _nr_sources = 4
+        _all_communicating_tuples = [] 
+        for _group_range in range(_nr_groups):
+            for _source_ind in range(_nr_sources):
+                _all_communicating_tuples.append([_group_range*8 + _source_ind+1, 
+                                                  _group_range*8 + _source_ind+1+4, int(np.iinfo(np.uint16).max)])
+        return _all_communicating_tuples
 
     def insert_measurements(self, reports: List[MillicarUeSingleReport]):
         if self._measurements_queue.full():
@@ -29,8 +74,10 @@ class MillicarPreoptimize:
         # we only perform optimization when we have full buffer
         return self._measurements_queue.full()
 
+    # Returns active links: rnti, peer rnti and sinr
     def _get_active_links(self) -> List[Tuple[int, int, float]]:
         # get data assignment data from last queue position
+        # make reference to the last queue element to define the active links
         _return_list = []
         _queue_size = len(self._measurements_queue.queue)
         if _queue_size > 0:
@@ -41,9 +88,20 @@ class MillicarPreoptimize:
                 if _ue_single_report.serving_sinr_reports is not None:
                     for _single_meas in _ue_single_report.serving_sinr_reports.list_of_measurements:
                         if _single_meas.peer_rnti != _rnti:
+                            # instead of taking the sinr of active measurements we take the estimated SNR
                             _return_list.append((_rnti, _single_meas.peer_rnti, _single_meas.sinr))
         return _return_list
 
+    # def _get_active_links(self) -> List[Tuple[int, int, float]]:
+    #     # get data assignment data from last queue position
+    #     # make reference to the last queue element to define the active links
+    #     _return_list = []
+        
+
+    #     # _return_list.append((_rnti, _single_meas.peer_rnti, _single_meas.sinr))
+    #     return _return_list
+
+    # return true if sinr of a link is below predefined threshold
     def _need_relay_link(self, _tuple: Tuple[int, int, float]):
         # rnti, peer rnti, sinr
         # can modify in the future
