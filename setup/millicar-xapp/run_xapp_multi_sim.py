@@ -13,10 +13,14 @@ import itertools
 
 _simulation_map = [
     [111, 0, 'no_relay', 2] ,
-    [112, -15, 'distance', 2] ,
-    [113, -15, 'sinr', 2] ,
-    [114, -10, 'distance', 2] ,
-    [115, -10, 'sinr', 2] ,
+    [112, -5, 'distance', 2] ,
+    [113, -5, 'sinr', 2] ,
+    [114, 0, 'distance', 2] ,
+    [115, 0, 'sinr', 2] ,
+    # [112, -15, 'distance', 2] ,
+    # [113, -15, 'sinr', 2] ,
+    # [114, -10, 'distance', 2] ,
+    # [115, -10, 'sinr', 2] ,
     [116, -5, 'distance', 2] ,
     [117, -5, 'sinr', 2] ,
     [118, 0, 'distance', 2] ,
