@@ -3,6 +3,8 @@ from xapp_control import *
 import functools 
 import os
 import transform_xml_to_dict_millicar as transform
+import socket
+import sctp
 
 def send_optimized_data(socket, encoder_class:RicControlMessageEncoder):
     # @functools.wraps(socket, encoder_class)
@@ -63,5 +65,13 @@ def main():
                 _optimize_and_send_data(_transform, _send_encoded_data_func)
 
 if __name__ == '__main__':
-    main()
-
+    # main()
+    server = sctp.sctpsocket_tcp(socket.AF_INET)
+    # Let's set up a connection:
+    server_ip = "0.0.0.0"                                                       
+    server.events.clear()                                                                    
+    server.bind((server_ip, 46422))                                                    
+    server.listen(3)
+    control_sck, client_addr = server.accept()
+    print('xApp connected: ' + client_addr[0] + ':' + str(client_addr[1])) 
+    control_sck.send(b'Hello')

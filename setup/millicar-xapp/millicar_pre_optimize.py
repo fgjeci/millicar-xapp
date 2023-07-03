@@ -54,7 +54,7 @@ class MillicarPreoptimize:
             return (-1, -1, -1)
 
     def _get_communication_rnti_tuples(self)-> List[List[int]]:
-        _nr_groups = 8
+        _nr_groups = 2
         _nr_sources = 4
         _all_communicating_tuples = [] 
         for _group_range in range(_nr_groups):

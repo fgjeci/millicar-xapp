@@ -283,13 +283,16 @@ class MillicarFormulation:
             _original_rnti_peer_tuple = self.preoptimize.get_original_link_tuple(_rnti, _peer_rnti)
             if _original_rnti_peer_tuple == (-1, -1, -1):
                 continue
-            _all_relay_rnti_distance = self._get_path_part_relay_rnti_distance_tuples(_rnti, _peer_rnti, _all_rntis,
-                                                                                _all_peer_positions)
-            _all_relay_rnti_goodness = self._get_path_part_relay_rnti_goodness_tuples(_rnti, _peer_rnti, _all_rntis,
-                                                                                          _all_peer_measurements)
-            _active_links_with_relays.append(ActiveLinkRelayList(rnti=_rnti, peer_rnti=_peer_rnti,
-                                                            relay_nodes_distance=_all_relay_rnti_distance, 
-                                                            relay_nodes_rnti_goodness=_all_relay_rnti_goodness))
+            try: 
+                _all_relay_rnti_distance = self._get_path_part_relay_rnti_distance_tuples(_rnti, _peer_rnti, _all_rntis,
+                                                                                    _all_peer_positions)
+                _all_relay_rnti_goodness = self._get_path_part_relay_rnti_goodness_tuples(_rnti, _peer_rnti, _all_rntis,
+                                                                                            _all_peer_measurements)
+                _active_links_with_relays.append(ActiveLinkRelayList(rnti=_rnti, peer_rnti=_peer_rnti,
+                                                                relay_nodes_distance=_all_relay_rnti_distance, 
+                                                                relay_nodes_rnti_goodness=_all_relay_rnti_goodness))
+            except ValueError:
+                pass
         _relay_paths_chosen = self._choose_relay_paths_distance(_active_links_with_relays)
         return _relay_paths_chosen
 
