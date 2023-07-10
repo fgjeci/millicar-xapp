@@ -3,6 +3,7 @@
 #------------------------------------
 ARG SCHEMA_PATH=schemas
 ARG XAPP_DIR=millicar-xapp
+ARG XAPP_DIR_EF=ef-xapp
 # ARG IPSO_DIR=ipso-xapp
 ARG CONNECTOR_DIR=xapp-sm-connector
 ARG STAGE_DIR=/home/${CONNECTOR_DIR}
@@ -42,6 +43,7 @@ ENV RMR_RTG_SVC="9999" \
 
 COPY ${CONNECTOR_DIR} ${STAGE_DIR}
 COPY ${XAPP_DIR} /home/${XAPP_DIR}
+# COPY ${XAPP_DIR_EF} /home/${XAPP_DIR_EF}
 # COPY ${IPSO_DIR} /home/${IPSO_DIR}
 
 WORKDIR ${STAGE_DIR}

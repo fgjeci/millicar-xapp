@@ -1,5 +1,6 @@
 SETUP_DIR=../setup
 MODEL_DIR=millicar-xapp
+MODEL_DIR_EF=ef-xapp
 CONNECTOR_DIR=xapp-sm-connector
 IMAGE_NAME=xapp-base
 DOCKER_FILE=Dockerfile_build_xapp_base
