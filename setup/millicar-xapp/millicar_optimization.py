@@ -44,8 +44,11 @@ class ActiveLinkRelayList:
             else:
                 # retunr the max among all possible relays
                 # considering the main link as well
-                return max(filter(lambda x: not np.isnan(x[1]), self.relay_nodes_rnti_goodness),
-                    key=itemgetter(1))
+                try:
+                    return max(filter(lambda x: not np.isnan(x[1]), self.relay_nodes_rnti_goodness),
+                        key=itemgetter(1))
+                except ValueError:
+                    return _main_link_goodness
 
 
     def choose_best_relay_position(self):

@@ -10,8 +10,9 @@ from ctrl_msg_encoder_decoder import RicControlMessageEncoder
 from millicar_pre_optimize import MillicarPreoptimize
 from millicar_optimization import MillicarFormulation
 import itertools
+import platform
 
-_simulation_map = [
+_simulation_map_ant2= [
 [111, 0, 'no_relay', 24] ,
 [112, -10, 'distance', 24] ,
 [113, -10, 'sinr', 24] ,
@@ -62,7 +63,7 @@ _simulation_map = [
 [158, 10, 'decentralized', 64] 
 ]
 
-_simulation_map = [
+_simulation_map_ares = [
     [111, 0, 'no_relay', 16] ,
     [112, -10, 'distance', 16] ,
     [113, -10, 'sinr', 16] ,
@@ -80,6 +81,8 @@ _simulation_map = [
     [125, 10, 'sinr', 16] ,
     [126, 10, 'decentralized', 16] 
 ]
+
+_simulation_map = _simulation_map_ant2 if platform.node() == 'antilion2' else _simulation_map_ares
 
 class XmlToDictManager:
     def __init__(self,
