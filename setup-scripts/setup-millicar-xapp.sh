@@ -63,8 +63,12 @@ remove_container() {
 remove_container ${CONTAINER_NAME}
 
 # replace parameters, recompile code and restart container
+# The -v command shall create a shared space between the docker_millicar and traces
+# inside the docker
 $SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network ric2 --ip ${XAPP_IP2} \
-    -e DBAAS_SERVICE_HOST=$DBAAS_IP2 -e DBAAS_SERVICE_PORT=$DBAAS_PORT2 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
+    -e DBAAS_SERVICE_HOST=$DBAAS_IP2 -e DBAAS_SERVICE_PORT=$DBAAS_PORT2 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest \
+    -v ~/docker_millicar:/home/traces
+    
 
 # $SUDO docker run -d -it --entrypoint ${ENTRYPOINT} --network=ric --ip ${XAPP_IP2} -p :36422:36422/sctp\
 #     -e DBAAS_SERVICE_HOST=$DBAAS_IP2 -e DBAAS_SERVICE_PORT=$DBAAS_PORT2 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest

@@ -69,3 +69,5 @@ RUN export CPATH=$CPATH:/usr/local/include \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /home/traces/
+
