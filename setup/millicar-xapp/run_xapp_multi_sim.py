@@ -11,6 +11,7 @@ from millicar_pre_optimize import MillicarPreoptimize
 from millicar_optimization import MillicarFormulation
 import itertools
 import platform
+import pickle
 
 _simulation_map_ant2= [
 [111, 0, 'no_relay', 24] ,
@@ -82,6 +83,9 @@ _simulation_map_ares = [
     [126, 10, 'decentralized', 16] 
 ]
 
+_JSON_REPORTS_SEND = "Reports"
+_JSON_PLMN = "Plmn"
+
 _simulation_map = _simulation_map_ant2 if platform.node() == 'antilion2' else _simulation_map_ares
 
 class XmlToDictManager:
@@ -89,7 +93,7 @@ class XmlToDictManager:
                  plmn: str = "111",
                  ) -> None:
         self.plmn = plmn
-        self.transform = transform.XmlToDictDataTransform()
+        self.transform = transform.XmlToDictDataTransform(plmn)
         # number of samples to take to for mean
         _sim_map_filter = list(filter(lambda _sim: str(_sim[0]) == str(plmn), _simulation_map))
         _relay_threshold = 46
@@ -115,7 +119,7 @@ def _optimize_and_send_data(transform: XmlToDictManager, sendingDataCallback):
     if len(_sim_map_filter) == 1:
         # _relay_threshold = _sim_map_filter[0][1]
         _optimization_type = _sim_map_filter[0][2]
-        _formulation = MillicarFormulation(transform.preoptimize_queue)
+        _formulation = MillicarFormulation(transform.preoptimize_queue, plmn)
         if _optimization_type == 'distance':
             print("Distance optimization")
             _all_relays: List[List[int]] = _formulation.optimize_closest_node()
@@ -127,6 +131,10 @@ def _optimize_and_send_data(transform: XmlToDictManager, sendingDataCallback):
 
     # removing duplicates in the list
     _all_relays = list(k for k,_ in itertools.groupby(_all_relays))
+    pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
+    pickle.dump({_JSON_PLMN: plmn,
+                _JSON_REPORTS_SEND: _all_relays}, pickle_out)
+    pickle_out.close()
 
     # transform data 
     _source_rntis = [_relay[0] for _relay in _all_relays]
@@ -152,6 +160,15 @@ def main():
     console.setLevel(logging.INFO)
     console.setFormatter(formatter)
     logger.addHandler(console)
+
+    # Create the pickle file for data reports
+    pickle_out = open('/home/traces/ue_reports.pickle', 'wb')
+    pickle_out.close()
+    pickle_out = open('/home/traces/relay_links_reports.pickle', 'wb')
+    pickle_out.close()
+    pickle_out = open('/home/traces/sent_relays_reports.pickle', 'wb')
+    pickle_out.close()
+
     control_sck = open_control_socket(4200)
 
     _transform_list: List[XmlToDictManager] = []

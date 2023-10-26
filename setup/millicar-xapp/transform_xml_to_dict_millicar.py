@@ -8,6 +8,7 @@ import operator
 import os
 # import numpy as np
 import re
+import pickle
 
 # _MAIN_TAG = ["E2AP-PDU"]
 _MAIN_TAG = ["message"]
@@ -65,6 +66,9 @@ _JSON_MEASUREMENT = "meas"
 _JSON_ACTIVE_MEASUREMENT = "ActiveMeasurment"
 # _JSON_CELL_ID = "cellId"
 _JSON_PEER_RNTI = "PeerRnti"
+_JSON_COLLECTION_TIME = "CollectionTime"
+_JSON_ALL_UE_REPORTS = "AllDataReports"
+_JSON_PLMN = "Plmn"
 
 
 class ServingPeerMeasurement:
@@ -188,7 +192,7 @@ class UserMeasurements:
 
 
 class MillicarUeSingleReport:
-    def __init__(self, input_dict):
+    def __init__(self, input_dict, header_collection_time: int = -1):
         self._input_dict = input_dict
         self.ue_id = None
         self.rnti = None
@@ -196,6 +200,7 @@ class MillicarUeSingleReport:
         self.position_y = None
         self.serving_sinr_reports: ServingUserMeasurements = None
         self.sinr_reports: UserMeasurements = None
+        self.collection_time = header_collection_time
 
     def _parse_pm_container(self, input_dict=None):
         if input_dict is None:
@@ -237,8 +242,9 @@ class MillicarUeSingleReport:
     def to_dict(self):
         return {_JSON_SOURCE_RNTI: self.rnti, _JSON_POSITION_X: self.position_x, _JSON_POSITION_Y: self.position_y,
                 _JSON_MEASUREMENT: self.sinr_reports.to_dict() if (self.sinr_reports is not None) else [],
-                _JSON_ACTIVE_MEASUREMENT: self.serving_sinr_reports.to_dict() if (
-                            self.serving_sinr_reports is not None) else []}
+                _JSON_ACTIVE_MEASUREMENT: self.serving_sinr_reports.to_dict() if (self.serving_sinr_reports is not None) else [],
+                _JSON_COLLECTION_TIME: self.collection_time
+                }
 
     def get_connected_rntis(self) -> List[int]:
         _all_rntis = set()
@@ -249,15 +255,17 @@ class MillicarUeSingleReport:
         return list(_all_rntis)
 
 class XmlToDictDataTransform:
-    def __init__(self):
+    def __init__(self, plmn="110"):
         self.num_of_received_reports = 0
         self.num_of_reports = 0
+        self.plmn_id = plmn
         self.all_users_reports: List[MillicarUeSingleReport] = []
 
     def reset(self):
         self.num_of_received_reports = 0
         self.num_of_reports = 0
         self.all_users_reports = []
+        self.plmn_id = "110"
 
     def can_perform_optimization(self):
         _received_all_reports = (self.num_of_reports != 0) & (self.num_of_received_reports == self.num_of_reports)
@@ -318,14 +326,15 @@ class XmlToDictDataTransform:
                 _header_plmn_id = bytes.fromhex(_header_plmn_id).decode('utf-8')
             except ValueError:
                 pass
+            _header_collection_time_int: int = -1
             try:
                 # _header_collection_time = int(_header_collection_time, 16)
-                _header_collection_time = int(re.sub(r"[\\n\t\s\n]*", "", _header_collection_time), 16)
+                _header_collection_time_int = int(re.sub(r"[\\n\t\s\n]*", "", _header_collection_time), 16)
             except ValueError:
                 pass
             # print(_header_collection_time, _cell_id_int, _header_plmn_id)
             # self.parse_message(_input_dict, _cell_id_int)
-            self.parse_message_single_report(_input_dict)
+            self.parse_message_single_report(_input_dict, _header_collection_time_int)
             # print("Received report " + str(self.num_of_received_reports) + " from " + str(self.num_of_reports) + \
             #       " for collection time " + str(_header_collection_time))
         except xml.parsers.expat.ExpatError:
@@ -351,14 +360,18 @@ class XmlToDictDataTransform:
                 pass
         return _collection_time, _cell_id, _plmn_id
 
-    def parse_message_single_report(self, input_dict: Mapping):
-        _reports_per_user_list: List[MillicarUeSingleReport] = self._parse_message_ues_single_report(input_dict)
+    def parse_message_single_report(self, input_dict: Mapping, header_collection_time: int):
+        _reports_per_user_list: List[MillicarUeSingleReport] = self._parse_message_ues_single_report(input_dict, header_collection_time)
         if len(_reports_per_user_list) != 1:
             print("Unexpected length of received reports")
         else:
             self.all_users_reports.append(_reports_per_user_list[0])
+            # store the data in traces everytime a new report comes
+            pickle_out = open('/home/traces/ue_reports.pickle', 'ab+')
+            pickle.dump(_reports_per_user_list[0].to_dict(), pickle_out)
+            pickle_out.close()
 
-    def _parse_message_ues_single_report(self, input_dict: Mapping) -> List:
+    def _parse_message_ues_single_report(self, input_dict: Mapping, header_collection_time: int) -> List:
         _message_dict = reduce(operator.getitem, _MESSAGE_PART, input_dict)
         _matched_ues_dict = {}
         try:
@@ -370,12 +383,12 @@ class XmlToDictDataTransform:
             _reports_per_user_list = []
             if isinstance(_matched_ues_dict, list):
                 for _imsi_data_report in _matched_ues_dict:
-                    single_report = MillicarUeSingleReport(_imsi_data_report)
+                    single_report = MillicarUeSingleReport(_imsi_data_report, header_collection_time)
                     single_report.parse()
                     if single_report.is_valid():
                         _reports_per_user_list.append(single_report)
             else:
-                single_report = MillicarUeSingleReport(_matched_ues_dict)
+                single_report = MillicarUeSingleReport(_matched_ues_dict, header_collection_time)
                 single_report.parse()
                 if single_report.is_valid():
                     _reports_per_user_list.append(single_report)
@@ -385,7 +398,11 @@ class XmlToDictDataTransform:
         return []
 
     def to_dict(self):
-        return [report.to_dict() for report in self.all_users_reports]
+        # return [report.to_dict() for report in self.all_users_reports]
+        return {
+            _JSON_PLMN: self.plmn_id,
+            _JSON_ALL_UE_REPORTS: [report.to_dict() for report in self.all_users_reports]
+        }
 
 
 _msg = b'<message><E2SM-KPM-IndicationHeader><indicationHeader-Format1><collectionStartTime>65 6C 66 65 72 28 21 00</collectionStartTime><id-GlobalE2node-ID><gNB><global-gNB-ID><plmn-id>31 31 31</plmn-id><gnb-id><gnb-ID>31 00 00 00\n                        </gnb-ID></gnb-id></global-gNB-ID></gNB></id-GlobalE2node-ID></indicationHeader-Format1></E2SM-KPM-IndicationHeader><E2SM-KPM-IndicationMessage><indicationMessage-Format1><pm-Containers><PM-Containers-Item><performanceContainer><oCU-CP><cu-CP-Resource-Status><numberOfActive-UEs>2</numberOfActive-UEs></cu-CP-Resource-Status></oCU-CP></performanceContainer></PM-Containers-Item></pm-Containers><cellObjectID>NRCellCU</cellObjectID><list-of-matched-UEs><PerUE-PM-Item><ueId>30 30 30 30 31</ueId><list-of-PM-Information><PM-Info-Item><pmType><measName>GeneratingNode.Rnti.UEID</measName></pmType><pmVal><valueInt>1</valueInt></pmVal></PM-Info-Item><PM-Info-Item><pmType><measName>GeneratingNode.PositionX.UEID</measName></pmType><pmVal><valueInt>0</valueInt></pmVal></PM-Info-Item><PM-Info-Item><pmType><measName>GeneratingNode.PositionY.UEID</measName></pmType><pmVal><valueInt>3</valueInt></pmVal></PM-Info-Item><PM-Info-Item><pmType><measName>HO.TrgtCellQual.RS-SINR.UEID</measName></pmType><pmVal><valueRRC><rrcEvent><b1/></rrcEvent></valueRRC></pmVal></PM-Info-Item></list-of-PM-Information></PerUE-PM-Item></list-of-matched-UEs></indicationMessage-Format1></E2SM-KPM-IndicationMessage></message>'

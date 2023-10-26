@@ -2,7 +2,17 @@ import numpy as np
 from typing import List, Tuple
 from operator import itemgetter
 from millicar_pre_optimize import MillicarPreoptimize
+import pickle
 
+_JSON_RNTI = "Rnti"
+_JSON_PEER_RNTI = "PeerRnti"
+_JSON_SNR_RELAY_NODES_RNTI = 'SnrRelayNodesRnti'
+_JSON_SNR_RELAY_NODES_GOODNESS = 'SnrRelayNodesGoodness'
+_JSON_DISTANCE_RELAY_NODES_RNTI = 'DistanceRelayNodesRnti'
+_JSON_DISTANCE_RELAY_NODES_GOODNESS = 'DistanceRelayNodesGoodness'
+
+_JSON_ACTIVE_LINK_RELAY_LIST = "RelayList"
+_JSON_PLMN = "Plmn"
 
 class ActiveLinkRelayList:
     def __init__(
@@ -78,13 +88,24 @@ class ActiveLinkRelayList:
                 return min(filter(lambda x: not np.isnan(x[1]), self.relay_nodes_distance),
                     key=itemgetter(1))
 
+    def to_dict(self):
+        return {
+            _JSON_RNTI: self.rnti,
+            _JSON_PEER_RNTI: self.peer_rnti,
+            _JSON_SNR_RELAY_NODES_RNTI: [_tuple[0] for _tuple in self.relay_nodes_rnti_goodness],
+            _JSON_SNR_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in self.relay_nodes_rnti_goodness],
+            _JSON_DISTANCE_RELAY_NODES_RNTI: [_tuple[0] for _tuple in self.relay_nodes_distance],
+            _JSON_DISTANCE_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in self.relay_nodes_distance]
+        }
 
 class MillicarFormulation:
     def __init__(
             self,
-            preoptimize
+            preoptimize,
+            plmn: str = "110"
     ):
         self.preoptimize: MillicarPreoptimize = preoptimize
+        self.plmn = plmn
 
     # return goodness factor from list of sinr
     def _get_goodness_factor(self, sinr_list: List[float]) -> float:
@@ -268,6 +289,12 @@ class MillicarFormulation:
                                                                                           _all_peer_measurements)
             _active_links_with_relays.append(ActiveLinkRelayList(rnti=_rnti, peer_rnti=_peer_rnti,
                                                                 relay_nodes_rnti_goodness=_all_relay_rnti_goodness))
+        # traces 
+        _map = {_JSON_PLMN:self.plmn,
+                _JSON_ACTIVE_LINK_RELAY_LIST: [_link_relay_list.to_dict() for _link_relay_list in _active_links_with_relays]}
+        pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
+        pickle.dump(_map, pickle_out)
+        pickle_out.close()
         _relay_paths_chosen = self._choose_relay_paths(_active_links_with_relays)
         return _relay_paths_chosen
     
@@ -296,6 +323,12 @@ class MillicarFormulation:
                                                                 relay_nodes_rnti_goodness=_all_relay_rnti_goodness))
             except ValueError:
                 pass
+        # traces 
+        _map = {_JSON_PLMN:self.plmn,
+                _JSON_ACTIVE_LINK_RELAY_LIST: [_link_relay_list.to_dict() for _link_relay_list in _active_links_with_relays]}
+        pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
+        pickle.dump(_map, pickle_out)
+        pickle_out.close()
         _relay_paths_chosen = self._choose_relay_paths_distance(_active_links_with_relays)
         return _relay_paths_chosen
 
