@@ -12,6 +12,7 @@ from millicar_optimization import MillicarFormulation
 import itertools
 import platform
 import pickle
+import datetime
 
 _simulation_map_ant2= [
 [111, 0, 'no_relay', 24] ,
@@ -131,7 +132,7 @@ def _optimize_and_send_data(transform: XmlToDictManager, sendingDataCallback):
 
     # removing duplicates in the list
     _all_relays = list(k for k,_ in itertools.groupby(_all_relays))
-    pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
+    pickle_out = open('/home/traces/sent_relays_reports.pickle', 'ab+')
     pickle.dump({_JSON_PLMN: plmn,
                 _JSON_REPORTS_SEND: _all_relays}, pickle_out)
     pickle_out.close()
@@ -194,7 +195,7 @@ def main():
             # appending the data to the tranformer
             if isinstance(data_sck, list):
                 for _msg in data_sck:
-                    logging.info('Received data: ' + _msg)
+                    # logging.info('Received data: ' + _msg)
                     _collection_time, _cell_id, _plmn_id = transform.XmlToDictDataTransform.peek_header(_msg)
                     # print("Plmn id of the sender " + str(_plmn_id))
                     if (_plmn_id!= -1) & (_cell_id!= -1)& (_collection_time!= -1):
@@ -210,7 +211,7 @@ def main():
                             _transform_list.append(_transform)
                             
             else:
-                logging.info('Received data: ' + data_sck)
+                # logging.info('Received data: ' + data_sck)
                 _collection_time, _cell_id, _plmn_id = transform.XmlToDictDataTransform.peek_header(data_sck)
                 # print("Plmn id of the sender " + str(_plmn_id))
                 if (_plmn_id!= -1) & (_cell_id!= -1)& (_collection_time!= -1):

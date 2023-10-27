@@ -9,6 +9,7 @@ import os
 # import numpy as np
 import re
 import pickle
+import datetime
 
 # _MAIN_TAG = ["E2AP-PDU"]
 _MAIN_TAG = ["message"]
@@ -69,6 +70,7 @@ _JSON_PEER_RNTI = "PeerRnti"
 _JSON_COLLECTION_TIME = "CollectionTime"
 _JSON_ALL_UE_REPORTS = "AllDataReports"
 _JSON_PLMN = "Plmn"
+_JSON_TIMESTAMP = 'time'
 
 
 class ServingPeerMeasurement:
@@ -243,7 +245,8 @@ class MillicarUeSingleReport:
         return {_JSON_SOURCE_RNTI: self.rnti, _JSON_POSITION_X: self.position_x, _JSON_POSITION_Y: self.position_y,
                 _JSON_MEASUREMENT: self.sinr_reports.to_dict() if (self.sinr_reports is not None) else [],
                 _JSON_ACTIVE_MEASUREMENT: self.serving_sinr_reports.to_dict() if (self.serving_sinr_reports is not None) else [],
-                _JSON_COLLECTION_TIME: self.collection_time
+                _JSON_COLLECTION_TIME: self.collection_time,
+                _JSON_TIMESTAMP: str(datetime.datetime.now()),
                 }
 
     def get_connected_rntis(self) -> List[int]:
@@ -400,6 +403,7 @@ class XmlToDictDataTransform:
     def to_dict(self):
         # return [report.to_dict() for report in self.all_users_reports]
         return {
+            _JSON_TIMESTAMP: str(datetime.datetime.now()),
             _JSON_PLMN: self.plmn_id,
             _JSON_ALL_UE_REPORTS: [report.to_dict() for report in self.all_users_reports]
         }

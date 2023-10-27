@@ -46,6 +46,9 @@ COPY ${XAPP_DIR} /home/${XAPP_DIR}
 COPY ${XAPP_DIR_EF} /home/${XAPP_DIR_EF}
 # COPY ${IPSO_DIR} /home/${IPSO_DIR}
 
+WORKDIR /home
+RUN mkdir -p traces
+
 WORKDIR ${STAGE_DIR}
 
 ##-----------------------------------
@@ -69,5 +72,5 @@ RUN export CPATH=$CPATH:/usr/local/include \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /home/traces/
+
 

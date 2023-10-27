@@ -3,6 +3,7 @@ from typing import List, Tuple
 from operator import itemgetter
 from millicar_pre_optimize import MillicarPreoptimize
 import pickle
+import datetime
 
 _JSON_RNTI = "Rnti"
 _JSON_PEER_RNTI = "PeerRnti"
@@ -10,9 +11,12 @@ _JSON_SNR_RELAY_NODES_RNTI = 'SnrRelayNodesRnti'
 _JSON_SNR_RELAY_NODES_GOODNESS = 'SnrRelayNodesGoodness'
 _JSON_DISTANCE_RELAY_NODES_RNTI = 'DistanceRelayNodesRnti'
 _JSON_DISTANCE_RELAY_NODES_GOODNESS = 'DistanceRelayNodesGoodness'
+_JSON_GOODNESS = "RelayGoodness"
+_JSON_DISTANCE = "RelayDistance"
 
 _JSON_ACTIVE_LINK_RELAY_LIST = "RelayList"
 _JSON_PLMN = "Plmn"
+_JSON_TIMESTAMP = 'time'
 
 class ActiveLinkRelayList:
     def __init__(
@@ -60,7 +64,6 @@ class ActiveLinkRelayList:
                 except ValueError:
                     return _main_link_goodness
 
-
     def choose_best_relay_position(self):
         # the choosing strategy is based upon the shortest path
         # return min(self.relay_nodes_distance, key=itemgetter(1))
@@ -89,13 +92,23 @@ class ActiveLinkRelayList:
                     key=itemgetter(1))
 
     def to_dict(self):
+        _filter_goodness = list(filter(lambda _single_link: (not np.isnan(_single_link[1]) ) \
+                                                    , self.relay_nodes_rnti_goodness))
+        _filter_distance_goodness = list(filter(lambda _single_link: (not np.isinf(_single_link[1]) ) \
+                                                    , self.relay_nodes_distance))
+        # return {
+        #     _JSON_RNTI: self.rnti,
+        #     _JSON_PEER_RNTI: self.peer_rnti,
+        #     _JSON_SNR_RELAY_NODES_RNTI: [_tuple[0] for _tuple in _filter_goodness],
+        #     _JSON_SNR_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in _filter_goodness],
+        #     _JSON_DISTANCE_RELAY_NODES_RNTI: [_tuple[0] for _tuple in _filter_distance_goodness],
+        #     _JSON_DISTANCE_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in _filter_distance_goodness]
+        # }
         return {
             _JSON_RNTI: self.rnti,
             _JSON_PEER_RNTI: self.peer_rnti,
-            _JSON_SNR_RELAY_NODES_RNTI: [_tuple[0] for _tuple in self.relay_nodes_rnti_goodness],
-            _JSON_SNR_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in self.relay_nodes_rnti_goodness],
-            _JSON_DISTANCE_RELAY_NODES_RNTI: [_tuple[0] for _tuple in self.relay_nodes_distance],
-            _JSON_DISTANCE_RELAY_NODES_GOODNESS: [_tuple[1] for _tuple in self.relay_nodes_distance]
+            _JSON_GOODNESS: [[_tuple[0], _tuple[1]] for _tuple in _filter_goodness],
+            _JSON_DISTANCE: [[_tuple[0], _tuple[1]] for _tuple in _filter_distance_goodness]
         }
 
 class MillicarFormulation:
@@ -290,7 +303,8 @@ class MillicarFormulation:
             _active_links_with_relays.append(ActiveLinkRelayList(rnti=_rnti, peer_rnti=_peer_rnti,
                                                                 relay_nodes_rnti_goodness=_all_relay_rnti_goodness))
         # traces 
-        _map = {_JSON_PLMN:self.plmn,
+        _map = {_JSON_TIMESTAMP: str(datetime.datetime.now()),
+                _JSON_PLMN:self.plmn,
                 _JSON_ACTIVE_LINK_RELAY_LIST: [_link_relay_list.to_dict() for _link_relay_list in _active_links_with_relays]}
         pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
         pickle.dump(_map, pickle_out)
@@ -324,7 +338,8 @@ class MillicarFormulation:
             except ValueError:
                 pass
         # traces 
-        _map = {_JSON_PLMN:self.plmn,
+        _map = {_JSON_TIMESTAMP: str(datetime.datetime.now()),
+                _JSON_PLMN:self.plmn,
                 _JSON_ACTIVE_LINK_RELAY_LIST: [_link_relay_list.to_dict() for _link_relay_list in _active_links_with_relays]}
         pickle_out = open('/home/traces/relay_links_reports.pickle', 'ab+')
         pickle.dump(_map, pickle_out)
