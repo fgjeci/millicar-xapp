@@ -268,7 +268,7 @@ class XmlToDictDataTransform:
         self.num_of_received_reports = 0
         self.num_of_reports = 0
         self.all_users_reports = []
-        self.plmn_id = "110"
+        # self.plmn_id = "110"
 
     def can_perform_optimization(self):
         _received_all_reports = (self.num_of_reports != 0) & (self.num_of_received_reports == self.num_of_reports)
@@ -370,8 +370,11 @@ class XmlToDictDataTransform:
         else:
             self.all_users_reports.append(_reports_per_user_list[0])
             # store the data in traces everytime a new report comes
-            pickle_out = open('/home/traces/ue_reports.pickle', 'ab+')
-            pickle.dump(_reports_per_user_list[0].to_dict(), pickle_out)
+            # pickle_out = open('/home/traces/ue_reports.pickle', 'ab+')
+            pickle_out = open('/home/traces/ue_reports_' + self.plmn_id + '.pickle', 'ab+')
+            _ue_reports_dict = _reports_per_user_list[0].to_dict()
+            _ue_reports_dict[_JSON_PLMN] = self.plmn_id
+            pickle.dump(_ue_reports_dict, pickle_out)
             pickle_out.close()
 
     def _parse_message_ues_single_report(self, input_dict: Mapping, header_collection_time: int) -> List:

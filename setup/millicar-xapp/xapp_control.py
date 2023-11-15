@@ -43,7 +43,7 @@ def receive_from_socket(socket, ric_encoder: RicControlMessageEncoder): # -> tup
 
     ack = 'Indication ACK\n'
 
-    data = socket.recv(20000)
+    data = socket.recv(50000)
 
     # might happen that multiple messages arrive at the same time
     # thus they are appended one another and the buffer appears as continuos
@@ -60,7 +60,7 @@ def receive_from_socket(socket, ric_encoder: RicControlMessageEncoder): # -> tup
         # print("Bytes consumed " + str(_bytes_consumed) + " input data length " + str(_input_data_length))
         if _data_buffer is not None:
             _total_bytes_consumed+=_bytes_consumed
-            # print("Total bytes consumed " + str(_total_bytes_consumed))
+            print("Total bytes consumed " + str(_total_bytes_consumed) + " input length " + str(_input_data_length) + " & bytes consumed " + str(_bytes_consumed))
             # return str(_data_buffer)
             # print(_data_buffer)
             _list_of_ric_messages.append(_data_buffer.decode('utf-8'))

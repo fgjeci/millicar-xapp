@@ -84,10 +84,77 @@ _simulation_map_ares = [
     [126, 10, 'decentralized', 16] 
 ]
 
+_simulation_map = [
+    [111, 0, 'no_relay', 16] ,
+    [112, -10, 'distance', 16] ,
+    [113, -10, 'sinr', 16] ,
+    [114, -10, 'decentralized', 16] ,
+    [115, -5, 'distance', 16] ,
+    [116, -5, 'sinr', 16] ,
+    [117, -5, 'decentralized', 16] ,
+    [118, 0, 'distance', 16] ,
+    [119, 0, 'sinr', 16] ,
+    [120, 0, 'decentralized', 16] ,
+    [121, 5, 'distance', 16] ,
+    [122, 5, 'sinr', 16] ,
+    [123, 5, 'decentralized', 16] ,
+    [124, 10, 'distance', 16] ,
+    [125, 10, 'sinr', 16] ,
+    [126, 10, 'decentralized', 16] ,
+    [127, 0, 'no_relay', 24] ,
+    [128, -10, 'distance', 24] ,
+    [129, -10, 'sinr', 24] ,
+    [130, -10, 'decentralized', 24] ,
+    [131, -5, 'distance', 24] ,
+    [132, -5, 'sinr', 24] ,
+    [133, -5, 'decentralized', 24] ,
+    [134, 0, 'distance', 24] ,
+    [135, 0, 'sinr', 24] ,
+    [136, 0, 'decentralized', 24] ,
+    [137, 5, 'distance', 24] ,
+    [138, 5, 'sinr', 24] ,
+    [139, 5, 'decentralized', 24] ,
+    [140, 10, 'distance', 24] ,
+    [141, 10, 'sinr', 24] ,
+    [142, 10, 'decentralized', 24] ,
+    [143, 0, 'no_relay', 48] ,
+    [144, -10, 'distance', 48] ,
+    [145, -10, 'sinr', 48] ,
+    [146, -10, 'decentralized', 48] ,
+    [147, -5, 'distance', 48] ,
+    [148, -5, 'sinr', 48] ,
+    [149, -5, 'decentralized', 48] ,
+    [150, 0, 'distance', 48] ,
+    [151, 0, 'sinr', 48] ,
+    [152, 0, 'decentralized', 48] ,
+    [153, 5, 'distance', 48] ,
+    [154, 5, 'sinr', 48] ,
+    [155, 5, 'decentralized', 48] ,
+    [156, 10, 'distance', 48] ,
+    [157, 10, 'sinr', 48] ,
+    [158, 10, 'decentralized', 48] ,
+    [159, 0, 'no_relay', 64] ,
+    [160, -10, 'distance', 64] ,
+    [161, -10, 'sinr', 64] ,
+    [162, -10, 'decentralized', 64] ,
+    [163, -5, 'distance', 64] ,
+    [164, -5, 'sinr', 64] ,
+    [165, -5, 'decentralized', 64] ,
+    [166, 0, 'distance', 64] ,
+    [167, 0, 'sinr', 64] ,
+    [168, 0, 'decentralized', 64] ,
+    [169, 5, 'distance', 64] ,
+    [170, 5, 'sinr', 64] ,
+    [171, 5, 'decentralized', 64] ,
+    [172, 10, 'distance', 64] ,
+    [173, 10, 'sinr', 64] ,
+    [174, 10, 'decentralized', 64] 
+]
+
 _JSON_REPORTS_SEND = "Reports"
 _JSON_PLMN = "Plmn"
 
-_simulation_map = _simulation_map_ant2 if platform.node() == 'antilion2' else _simulation_map_ares
+# _simulation_map = _simulation_map_ant2 if platform.node() == 'antilion2' else _simulation_map_ares
 
 class XmlToDictManager:
     def __init__(self,
@@ -163,8 +230,10 @@ def main():
     logger.addHandler(console)
 
     # Create the pickle file for data reports
-    pickle_out = open('/home/traces/ue_reports.pickle', 'wb')
-    pickle_out.close()
+    for _plmn in range(110, 180):
+        pickle_out = open('/home/traces/ue_reports_' +str(_plmn)+ '.pickle', 'wb')
+        pickle_out.close()
+
     pickle_out = open('/home/traces/relay_links_reports.pickle', 'wb')
     pickle_out.close()
     pickle_out = open('/home/traces/sent_relays_reports.pickle', 'wb')
