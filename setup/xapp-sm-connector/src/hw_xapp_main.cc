@@ -51,6 +51,10 @@ int main(int argc, char *argv[]){
 	signal(SIGINT, signalHandler);
 	signal(SIGTERM, signalHandler);
 
+	// modified
+	mdclog_level_set(DEFAULT_LOG_LEVEL);
+	// end modification
+
 	//getting the listening port and xapp name info
 	std::string  port = config[XappSettings::SettingName::HW_PORT];
 	std::string  name = config[XappSettings::SettingName::XAPP_NAME];

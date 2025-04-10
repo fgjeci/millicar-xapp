@@ -50,6 +50,8 @@ WORKDIR /home
 RUN mkdir -p traces
 
 WORKDIR ${STAGE_DIR}
+RUN mkdir -p build
+RUN ./ric_message_sl.sh
 
 ##-----------------------------------
 # Now install the program
